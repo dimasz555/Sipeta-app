@@ -2,6 +2,7 @@
     "private": true,
     "scripts": {
         "dev": "vite",
+        "watch": "vite --watch",
         "build": "vite build"
     },
     "devDependencies": {

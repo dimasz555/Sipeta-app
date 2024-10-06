@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
@@ -27,59 +28,76 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'login' => ['required', 'string'], // bisa username atau phone
             'password' => ['required', 'string'],
         ];
     }
 
-    /**
-     * Attempt to authenticate the request's credentials.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        // Cek apakah input login berupa angka atau bukan untuk menentukan username atau phone
+        $loginType = is_numeric($this->login) ? 'phone' : 'username';
+
+        // Cek apakah user ada berdasarkan loginType (phone atau username)
+        $user = User::where($loginType, $this->login)->first();
+
+        if (!$user) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'login' => trans('Username/No Hp Anda Salah!'),
+            ]);
+        }
+
+        // Autentikasi menggunakan username atau phone dan password
+        if (!Auth::attempt([$loginType => $this->login, 'password' => $this->password], $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'password' => trans('Password Anda salah!'),
             ]);
         }
 
         RateLimiter::clear($this->throttleKey());
     }
 
-    /**
-     * Ensure the login request is not rate limited.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function ensureIsNotRateLimited(): void
+
+    // Method untuk mencoba login menggunakan username atau phone
+    protected function attemptLoginWithUsernameOrPhone()
+    {
+        $credentials = $this->only('password');
+
+        // Cek apakah input 'login' berupa angka atau bukan
+        $loginInput = $this->input('login');
+
+        if (is_numeric($loginInput)) {
+            // Jika input berupa angka, berarti itu nomor HP (phone)
+            $credentials['phone'] = $loginInput;
+        } else {
+            // Jika bukan angka, berarti itu username
+            $credentials['username'] = $loginInput;
+        }
+
+        // Coba autentikasi dengan field phone atau username
+        return Auth::attempt($credentials, $this->boolean('remember'));
+    }
+
+
+    protected function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
-        event(new Lockout($this));
-
-        $seconds = RateLimiter::availableIn($this->throttleKey());
-
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'login' => __('auth.throttle', ['seconds' => RateLimiter::availableIn($this->throttleKey())]),
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return strtolower($this->input('login')) . '|' . $this->ip();
     }
 }

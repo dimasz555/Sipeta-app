@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -29,7 +31,17 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // Cek role pengguna dan lakukan redirect
+        $user = Auth::user();
+        
+        if ($user->hasRole('admin')) {
+            return redirect('/admin/dashboard');
+        } elseif ($user->hasRole('konsumen')) {
+            return redirect('/profile');
+        }
+
+        // Jika tidak ada role yang sesuai, bisa redirect ke halaman default
+        // return redirect('/home'); // Ganti dengan halaman default yang diinginkan
     }
 
     /**
