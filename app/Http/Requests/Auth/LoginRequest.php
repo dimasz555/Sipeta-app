@@ -47,7 +47,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'login' => trans('Username/No Hp Anda Salah!'),
+                'login' => trans('Username/No Hp Tidak Tersedia!'),
             ]);
         }
 

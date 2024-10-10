@@ -8,6 +8,9 @@
 
     <title>@yield('title')</title>
 
+    <!-- FavIcon -->
+    <link rel="icon" href="{{ asset('assets/img/logo-sajada.png') }}" type="image/png">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -22,14 +25,17 @@
     <link href="{{ asset ('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
     <!-- <link href="{{ asset ('admin/assets/vendor/simple-datatables/style.css') }}" rel="stylesheet"> -->
 
+
     <!-- Template Main CSS File -->
     <link href="{{ asset ('assets/css/style.css') }}" rel="stylesheet">
+
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
+
     <div id="app">
         @include('layouts.header')
 
@@ -38,18 +44,28 @@
         <!-- Page Content -->
         <main>
             @yield('content')
+
         </main>
     </div>
+
+    <!-- Vendor JS Files -->
+    <script src="{{asset ('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{asset ('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset ('assets/vendor/chart.js/chart.umd.js')}}"></script>
+    <script src="{{asset ('assets/vendor/echarts/echarts.min.js')}}"></script>
+    <script src="{{asset ('assets/vendor/quill/quill.min.js')}}"></script>
+    <script src="{{asset ('assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
+    <script src="{{asset ('assets/vendor/tinymce/tinymce.min.js')}}"></script>
+
+    <!-- Include SweetAlert Toast -->
+    @include('sweetalert::alert')
+
+    <!-- Tambahkan skrip debugging di bawah ini -->
+    <script>
+        console.log("SweetAlert loaded");
+    </script>
 </body>
 
-<!-- Vendor JS Files -->
-<script src="{{asset ('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
-<script src="{{asset ('assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{asset ('assets/vendor/chart.js/chart.umd.js')}}"></script>
-<script src="{{asset ('assets/vendor/echarts/echarts.min.js')}}"></script>
-<script src="{{asset ('assets/vendor/quill/quill.min.js')}}"></script>
-<script src="{{asset ('assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
-<script src="{{asset ('assets/vendor/tinymce/tinymce.min.js')}}"></script>
 
 <!-- Template Main JS File -->
 <!-- <script src="{{asset('assets/js/main.js') }}"></script> -->

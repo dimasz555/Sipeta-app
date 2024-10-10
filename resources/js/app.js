@@ -12,6 +12,11 @@ Alpine.start();
 //     '../fonts/**',
 //   ]);
 
+// import sweetalert2
+// import Swal from "sweetalert2";
+// window.Swal = Swal;
+
+
 // Import external CSS and JS 
 import '../../public/assets/vendor/bootstrap/css/bootstrap.min.css';
 import '../../public/assets/css/style.css';

@@ -23,7 +23,7 @@
         <div class="row">
 
             <!-- Left side columns -->
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <div class="row">
 
                     <!-- Users Card -->
@@ -69,10 +69,10 @@
                     <!-- Guru Card -->
                     <div class="col-xxl-4 col-xl-12">
 
-                        <div class="card info-card customers-card">
+                        <div class="card info-card sales-card">
 
                             <div class="card-body">
-                                <h5 class="card-title">Guru</h5>
+                                <h5 class="card-title">Konsumen</h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
