@@ -16,19 +16,21 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Vendor CSS Files -->
-
     <link href="{{ asset ('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset ('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset ('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
     <link href="{{ asset ('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
     <link href="{{ asset ('assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
     <link href="{{ asset ('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
-    <!-- <link href="{{ asset ('admin/assets/vendor/simple-datatables/style.css') }}" rel="stylesheet"> -->
+    <link href="{{ asset ('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
 
+    <!-- DataTables -->
+    <link href="{{ asset('plugin/DataTables-1.13.8/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugin/Buttons-2.4.2/css/buttons.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugin/DateTime-1.5.1/css/dataTables.dateTime.min.css') }}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="{{ asset ('assets/css/style.css') }}" rel="stylesheet">
-
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -57,13 +59,19 @@
     <script src="{{asset ('assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
     <script src="{{asset ('assets/vendor/tinymce/tinymce.min.js')}}"></script>
 
+    <!-- datatable js -->
+    <script src="{{ asset('plugin/jQuery-3.7.0/jquery-3.7.0.js') }}"></script>
+    <script src="{{ asset('plugin/DataTables-1.13.8/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugin/pdfmake-0.2.7/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugin/pdfmake-0.2.7/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugin/JSZip-3.10.1/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugin/Buttons-2.4.2/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugin/Buttons-2.4.2/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugin/Buttons-2.4.2/js/buttons.print.min.js') }}"></script>
+
     <!-- Include SweetAlert Toast -->
     @include('sweetalert::alert')
 
-    <!-- Tambahkan skrip debugging di bawah ini -->
-    <script>
-        console.log("SweetAlert loaded");
-    </script>
 </body>
 
 

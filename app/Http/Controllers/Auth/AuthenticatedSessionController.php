@@ -35,9 +35,9 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
         
         if ($user->hasRole('admin')) {
-            return redirect('/admin/dashboard');
+            return redirect('/admin/profil');
         } elseif ($user->hasRole('konsumen')) {
-            return redirect('/profile');
+            return redirect('/profil');
         }
 
         // Jika tidak ada role yang sesuai, bisa redirect ke halaman default

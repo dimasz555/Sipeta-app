@@ -10,12 +10,22 @@
        </a>
      </li>
 
+     @if(auth()->user()->hasRole('admin'))
+     <li class="nav-item">
+       <a class="nav-link {{ request()->routeIs('admin.profil') ? 'active' : '' }}" href="{{ route('admin.profil') }}">
+         <i class="bi bi-person"></i>
+         <span>Profil</span>
+       </a>
+     </li>
+     @elseif(auth()->user()->hasRole('konsumen'))
      <li class="nav-item">
        <a class="nav-link {{ request()->routeIs('profil') ? 'active' : '' }}" href="{{ route('profil') }}">
          <i class="bi bi-person"></i>
          <span>Profil</span>
        </a>
      </li>
+     @endif
+
 
      <li class="nav-item">
        <a class="nav-link {{ request()->routeIs('index.konsumen') ? 'active' : '' }}" href="{{ route('index.konsumen') }}">
@@ -25,7 +35,7 @@
      </li>
 
      <li class="nav-item">
-       <a class="nav-link">
+       <a class="nav-link {{ request()->routeIs('index.project') ? 'active' : '' }}" href="{{ route('index.project') }}">
          <i class="bi bi-bank"></i>
          <span>Kelola Project</span>
        </a>

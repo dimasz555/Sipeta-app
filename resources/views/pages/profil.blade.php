@@ -87,7 +87,7 @@ Profil
                             <div class="modal-body px-sm-5 mx-50 pb-5">
                                 <h3 class="text-center mb-1" id="addNewCardTitle">Edit Data User</h3>
                                 <!-- form -->
-                                <form class="form row gy-1 gx-2 mt-75" method="POST" action="{{ route('profil.update') }}">
+                                <form class="form row gy-1 gx-2 mt-75" method="POST" action="{{ auth()->user()->hasRole('admin') ? route('admin.profil.update') : route('profil.update') }}">
                                     @method('put')
                                     @csrf
                                     <input type="hidden" name="id" id="id" value="{{auth::user()->id}}" />
@@ -143,7 +143,7 @@ Profil
                         <!-- Bordered Tabs -->
                         <div class="password-detail mx-2" id="profile-change-password">
                             <!-- Change Password Form -->
-                            <form id="editpassword" method="POST" action="{{route('password.update')}}">
+                            <form method="POST" action="{{ auth()->user()->hasRole('admin') ? route('admin.password.update') : route('password.update') }}">
                                 @csrf
                                 @method('put')
                                 <div class="row mb-3">
@@ -155,7 +155,7 @@ Profil
 
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Password Baru</label>
+                                    <label for="newPassword" class="col-md-4 col-lg-3 col-form- label">Password Baru</label>
                                     <div class="col-md-8 col-lg-9">
                                         <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
                                         <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />

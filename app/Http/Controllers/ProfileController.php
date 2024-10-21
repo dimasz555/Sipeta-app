@@ -49,7 +49,7 @@ class ProfileController extends Controller
                 ->first();
             if ($existingUsername) {
                 // Redirect dengan alert toast jika username sudah digunakan
-                Alert::toast('Username sudah digunakan oleh akun lain.', 'error')->autoClose(10000);
+                Alert::toast('Username Sudah Terdaftar Oleh Akun Lain', 'error')->autoClose(10000);
                 return redirect()->back();
             }
 
@@ -59,7 +59,7 @@ class ProfileController extends Controller
                 ->first();
             if ($existingPhone) {
                 // Redirect dengan alert toast jika phone sudah digunakan
-                Alert::toast('Nomor Hp sudah digunakan oleh akun lain.', 'error')->autoClose(10000);
+                Alert::toast('Nomor Hp Sudah Terdaftar Oleh Akun Lain', 'error')->autoClose(10000);
                 return redirect()->back();
             }
 
@@ -89,10 +89,10 @@ class ProfileController extends Controller
                 'current_password' => ['required', 'current_password'],
                 'password' => ['required', Password::defaults(), 'confirmed'],
             ], [
-                'current_password.required' => 'Password lama wajib diisi.',
-                'current_password.current_password' => 'Password lama tidak sesuai.',
-                'password.required' => 'Password baru wajib diisi.',
-                'password.confirmed' => 'Konfirmasi password tidak cocok.',
+                'current_password.required' => 'Password Lama Wajib Diisi!',
+                'current_password.current_password' => 'Password Lama Tidak Sesuai!',
+                'password.required' => 'Password Baru Wajib Diisi!',
+                'password.confirmed' => 'Konfirmasi Password Tidak cocok!',
             ]);
 
             // Update password
@@ -107,7 +107,6 @@ class ProfileController extends Controller
 
         return redirect()->back();
     }
-
 
     /**
      * Delete the user's account.

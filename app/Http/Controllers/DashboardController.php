@@ -29,7 +29,7 @@ class DashboardController extends Controller
 
             // Menghitung jumlah pengguna dengan role 
             $totalKonsumen = User::whereHas('roles', function ($query) {
-                $query->where('name', 'guru');
+                $query->where('name', 'konsumen');
             })->count();
 
 
@@ -40,13 +40,12 @@ class DashboardController extends Controller
                 'totalAdmin' => $totalAdmin,
                 // 'recentActivities' => $recentActivities,
             ]);
-
         } catch (\Exception $e) {
             // Log error (optional)
             Log::error('Dashboard error: ' . $e->getMessage());
 
             // Redirect ke halaman 404
-            return response()->view('layouts.error', [], 404);
+            return response()->view('errors.404', [], 404);
         }
     }
 }
