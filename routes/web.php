@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KelolaBokingController;
 use App\Http\Controllers\KelolaKonsumenController;
 use App\Http\Controllers\KelolaProjectController;
 use App\Http\Controllers\ProfileController;
@@ -48,6 +49,9 @@ Route::middleware('auth', 'role:admin')->group(function () {
     Route::post('/admin/kelola-project/tambah-blok', [KelolaProjectController::class, 'storeBlok'])->name('tambah.blok');
     Route::put('/admin/kelola-project/edit-blok', [KelolaProjectController::class, 'updateBlok'])->name('edit.blok');
     Route::delete('/admin/kelola-project/hapus-blok', [KelolaProjectController::class, 'destroyBlok'])->name('hapus.blok');
+
+    Route::get('/admin/kelola-boking', [KelolaBokingController::class, 'index'])->name('index.boking');
+
 
 
 });
