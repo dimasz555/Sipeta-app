@@ -1,0 +1,1 @@
+<img src="{{ asset('assets/img/logo-sajada.png') }}" alt="Logo" style="width: 200px; height:auto" {{ $attributes }}>

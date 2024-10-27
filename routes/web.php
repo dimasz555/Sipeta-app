@@ -1,6 +1,13 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KelolaBokingController;
+use App\Http\Controllers\KelolaKonsumenController;
+use App\Http\Controllers\KelolaProjectController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +20,54 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/tes', function () {
+//     Alert::error('Success Title','Success Message');
+//     return view('welcome');
+// });
+
+// Route::get('/error', function () {
+//     // This route does not exist and will trigger the 404 page
+// });
+
+// Route Admin
+Route::middleware('auth', 'role:admin')->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/admin/profil', [ProfileController::class, 'index'])->name('admin.profil');
+    Route::put('/admin/edit-profil', [ProfileController::class, 'update'])->name('admin.profil.update');
+    Route::put('/admin/update-password', [ProfileController::class, 'updatePassword'])->name('admin.password.update');
+
+    Route::get('/admin/kelola-konsumen', [KelolaKonsumenController::class, 'index'])->name('index.konsumen');
+    Route::post('/admin/kelola-konsumen/tambah', [KelolaKonsumenController::class, 'store'])->name('tambah.konsumen');
+    Route::put('/admin/kelola-konsumen/edit', [KelolaKonsumenController::class, 'update'])->name('edit.konsumen');
+    Route::delete('/admin/kelola-konsumen/hapus', [KelolaKonsumenController::class, 'destroy'])->name('hapus.konsumen');
+    Route::put('/admin/kelola-konsumen/reset-password', [KelolaKonsumenController::class, 'resetPassword'])->name('resetpassword.konsumen');
+
+    Route::get('/admin/kelola-project', [KelolaProjectController::class, 'index'])->name('index.project');
+    Route::post('/admin/kelola-project/tambah', [KelolaProjectController::class, 'storeProject'])->name('tambah.project');
+    Route::put('/admin/kelola-project/edit', [KelolaProjectController::class, 'updateProject'])->name('edit.project');
+    Route::delete('/admin/kelola-project/hapus', [KelolaProjectController::class, 'destroyProject'])->name('hapus.project');
+    Route::post('/admin/kelola-project/tambah-blok', [KelolaProjectController::class, 'storeBlok'])->name('tambah.blok');
+    Route::put('/admin/kelola-project/edit-blok', [KelolaProjectController::class, 'updateBlok'])->name('edit.blok');
+    Route::delete('/admin/kelola-project/hapus-blok', [KelolaProjectController::class, 'destroyBlok'])->name('hapus.blok');
+
+    Route::get('/admin/kelola-boking', [KelolaBokingController::class, 'index'])->name('index.boking');
+
+
+
 });
+
+
+// Route Konsumen
+Route::middleware(['auth', 'role:konsumen'])->group(function () {
+    Route::get('/profil', [ProfileController::class, 'index'])->name('profil');
+    Route::put('/edit-profil', [ProfileController::class, 'update'])->name('profil.update');
+    Route::put('/update-password', [ProfileController::class, 'updatePassword'])->name('password.update');
+});
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
+
+require __DIR__ . '/auth.php';
