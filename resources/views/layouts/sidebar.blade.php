@@ -42,9 +42,16 @@
      </li>
 
      <li class="nav-item">
-       <a class="nav-link">
-         <i class="bi bi-bank"></i>
-         <span>Kelola Project</span>
+       <a class="nav-link {{ request()->routeIs('index.boking') ? 'active' : '' }}" href="{{ route('index.boking') }}">
+         <i class="bi bi-calendar"></i>
+         <span>Kelola Boking</span>
+       </a>
+     </li>
+
+     <li class="nav-item">
+       <a class="nav-link {{ request()->routeIs('index.pembayaran') ? 'active' : '' }}" href="{{ route('index.pembayaran') }}">
+         <i class="bi bi-cash-stack"></i>
+         <span>Kelola Pembayaran</span>
        </a>
      </li>
 

@@ -29,6 +29,9 @@
     <link href="{{ asset('plugin/Buttons-2.4.2/css/buttons.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugin/DateTime-1.5.1/css/dataTables.dateTime.min.css') }}" rel="stylesheet">
 
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- Template Main CSS File -->
     <link href="{{ asset ('assets/css/style.css') }}" rel="stylesheet">
 
@@ -46,9 +49,14 @@
         <!-- Page Content -->
         <main>
             @yield('content')
-
         </main>
     </div>
+
+    <!-- jQuery -->
+    <script src="{{ asset('plugin/jQuery-3.7.0/jquery-3.7.0.js') }}"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- Vendor JS Files -->
     <script src="{{asset ('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
@@ -59,8 +67,7 @@
     <script src="{{asset ('assets/vendor/simple-datatables/simple-datatables.js')}}"></script>
     <script src="{{asset ('assets/vendor/tinymce/tinymce.min.js')}}"></script>
 
-    <!-- datatable js -->
-    <script src="{{ asset('plugin/jQuery-3.7.0/jquery-3.7.0.js') }}"></script>
+    <!-- DataTables JS -->
     <script src="{{ asset('plugin/DataTables-1.13.8/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugin/pdfmake-0.2.7/pdfmake.min.js') }}"></script>
     <script src="{{ asset('plugin/pdfmake-0.2.7/vfs_fonts.js') }}"></script>
@@ -72,10 +79,9 @@
     <!-- Include SweetAlert Toast -->
     @include('sweetalert::alert')
 
+    <!-- Template Main JS File -->
+    <!-- <script src="{{asset('assets/js/main.js') }}"></script> -->
+
 </body>
-
-
-<!-- Template Main JS File -->
-<!-- <script src="{{asset('assets/js/main.js') }}"></script> -->
 
 </html>
