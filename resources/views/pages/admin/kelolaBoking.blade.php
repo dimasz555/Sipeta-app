@@ -43,7 +43,7 @@ Kelola Boking
                     @forelse ($boking as $bk)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $bk->tgl_boking }}</td>
+                        <td>{{ \Carbon\Carbon::parse($bk->tgl_boking)->translatedFormat('j F Y') }}</td>
                         <td>{{ $bk->user->name }}</td>
                         <td>{{ $bk->project->name }}</td>
                         <td>{{ $bk->blok->blok }}</td>
@@ -63,8 +63,13 @@ Kelola Boking
                         </td>
                         <td>
                             <x-button-action style="background-color: #BC55C3;" data-bs-toggle="modal" data-bs-target="#editBoking"
-                                data-id="{{ $bk->id }}" data-user-id="{{ $bk->user->id }}" data-user-name="{{ $bk->user->name }}" data-project-id="{{ $bk->project->id }}"
-                                data-blok-id="{{ $bk->blok->id }}" data-no_blok="{{ $bk->no_blok }}" data-tgl_boking="{{ $bk->tgl_boking }}"
+                                data-id="{{ $bk->id }}"
+                                data-user-id="{{ $bk->user->id }}"
+                                data-user-name="{{ $bk->user->name }}"
+                                data-project-id="{{ $bk->project->id }}"
+                                data-blok-id="{{ $bk->blok->id }}"
+                                data-no_blok="{{ $bk->no_blok }}"
+                                data-tgl_boking="{{ $bk->tgl_boking }}"
                                 data-harga_boking="{{ $bk->harga_boking }}" title="Edit Data Boking">
                                 <i class="bi bi-pencil text-white"></i>
                             </x-button-action>
@@ -190,7 +195,7 @@ Kelola Boking
                         @method('PUT')
                         <input type="hidden" name="id" id="edit_boking_id">
 
-                        <div class="modal-body">
+                        <div class="modal-body ">
                             <div class="col-12">
                                 <label class="form-label" for="edit_user_id">Nama Konsumen</label>
                                 <select id="edit_user_id" name="user_id" class="form-select select2" required>
@@ -503,16 +508,12 @@ Kelola Boking
             var button = $(event.relatedTarget);
             var id = button.data('id');
             var userId = button.data('user-id');
-            var userName = button.data('user-name'); // Ensure this is set
+            var userName = button.data('user-name');
             var projectId = button.data('project-id');
             var blokId = button.data('blok-id');
             var no_blok = button.data('no_blok');
             var tgl_boking = button.data('tgl_boking');
             var harga_boking = button.data('harga_boking');
-
-            // Debug di console
-            console.log("User ID:", userId);
-            console.log("User Name:", userName);
 
             var modal = $(this);
 
