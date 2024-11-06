@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-  migrate-seed:
+  build:
+    name: 🔨 Build
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -43,7 +44,39 @@ jobs:
       - name: Storage Permission
         run: chmod -R 777 storage bootstrap/cache
 
-      # Step 1: Run Initial Migrations Only
+  test:
+    name: ✅ Test
+    needs: build
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: passw0rd
+          MYSQL_DATABASE: laravel
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, bcmath, pdo, pdo_mysql
+
+      - name: Copy .env file
+        run: cp .env.example .env
+
+      - name: Install dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
       - name: Initial Migration
         env:
           DB_CONNECTION: mysql
@@ -60,7 +93,6 @@ jobs:
           php artisan migrate --path=/database/migrations/2024_10_02_123932_laratrust_setup_tables.php
           php artisan migrate --path=/database/migrations/2024_10_03_044644_add_atribut_users.php
 
-      # Step 2: Run Roles Table Seeder
       - name: Run Roles Table Seeder
         env:
           DB_CONNECTION: mysql
@@ -71,7 +103,6 @@ jobs:
           DB_PASSWORD: passw0rd
         run: php artisan db:seed --class=RolesTableSeeder
 
-      # Step 3: Run Remaining Migrations
       - name: Full Migration and Seed
         env:
           DB_CONNECTION: mysql
@@ -84,8 +115,19 @@ jobs:
           php artisan migrate --path=/database/migrations
           php artisan db:seed
 
+      - name: Execute Tests
+        env:
+          DB_CONNECTION: mysql
+          DB_DATABASE: laravel
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USERNAME: root
+          DB_PASSWORD: passw0rd
+        run: php artisan test
+
   deploy:
-    needs: migrate-seed
+    name: 🚀 Deploy
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -96,3 +138,4 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
+
