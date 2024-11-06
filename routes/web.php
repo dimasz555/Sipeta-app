@@ -3,8 +3,10 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KelolaBokingController;
 use App\Http\Controllers\KelolaKonsumenController;
+use App\Http\Controllers\kelolaPembayaranController;
 use App\Http\Controllers\KelolaProjectController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -51,6 +53,14 @@ Route::middleware('auth', 'role:admin')->group(function () {
     Route::delete('/admin/kelola-project/hapus-blok', [KelolaProjectController::class, 'destroyBlok'])->name('hapus.blok');
 
     Route::get('/admin/kelola-boking', [KelolaBokingController::class, 'index'])->name('index.boking');
+    Route::get('/search-user', [KelolaBokingController::class, 'searchUser'])->name('search.user');
+    Route::post('/admin/kelola-boking/tambah', [KelolaBokingController::class, 'store'])->name('tambah.boking');
+    Route::put('/admin/kelola-boking/edit', [KelolaBokingController::class, 'updateBoking'])->name('edit.boking');
+    Route::post('/admin/kelola-boking/konfirmasi', [KelolaBokingController::class, 'confirmBoking'])->name('confirm.boking');
+    Route::post('/admin/kelola-boking/batal', [KelolaBokingController::class, 'cancelBoking'])->name('cancel.boking');
+    Route::delete('/admin/kelola-boking/hapus', [KelolaBokingController::class, 'destroyBoking'])->name('hapus.boking');
+
+    Route::get('/admin/kelola-pembayaran', [kelolaPembayaranController::class, 'index'])->name('index.pembayaran');
 
 
 
