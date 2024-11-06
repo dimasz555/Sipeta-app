@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  web-deploy:
+  migrate-seed:
     runs-on: ubuntu-latest
     services:
       mysql:
