@@ -54,6 +54,9 @@ jobs:
           php-version: '8.1'
           extensions: mbstring, bcmath, pdo, pdo_mysql
 
+      - name: Install dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
       - name: Initial Migration
         env:
           DB_CONNECTION: mysql
