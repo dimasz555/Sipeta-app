@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Detail Pembelian
+Detail Pembayaran
 @endsection
 
 @section('content')
@@ -11,9 +11,9 @@ Detail Pembelian
         <h1>Detail Pembelian</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('index.pembelian') }}">Index Pembelian</a></li>
-                <li class="breadcrumb-item active">Detail Pembelian</li>
+                <li class="breadcrumb-item"><a href="{{ route('profil') }}">Profil</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('index.pembayaran.kavling') }}">Pembayaran Kavling</a></li>
+                <li class="breadcrumb-item active">Detail Pembayaran</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -24,48 +24,48 @@ Detail Pembelian
                 <tbody>
                     <tr>
                         <td><strong>Nama Konsumen</strong></td>
-                        <td>: {{ $pembelian->user->name }}</td>
+                        <td>: {{ $pembayaran->user->name }}</td>
                     </tr>
                     <tr>
                         <td><strong>Tanggal Pembelian</strong></td>
-                        <td>: {{ \Carbon\Carbon::parse($pembelian->tgl_pembelian)->translatedFormat('j F Y') }}</td>
+                        <td>: {{ \Carbon\Carbon::parse($pembayaran->tgl_pembelian)->translatedFormat('j F Y') }}</td>
                     </tr>
                     <tr>
                         <td><strong>Project</strong></td>
-                        <td>: {{ $pembelian->boking->project->name ?? 'Tidak Diketahui' }}</td>
+                        <td>: {{ $pembayaran->boking->project->name ?? 'Tidak Diketahui' }}</td>
                     </tr>
                     <tr>
                         <td><strong>Blok</strong></td>
-                        <td>: {{ $pembelian->boking->blok->blok }}</td>
+                        <td>: {{ $pembayaran->boking->blok->blok }}</td>
                     </tr>
                     <tr>
                         <td><strong>Nomor Blok</strong></td>
-                        <td>: {{ $pembelian->boking->no_blok }}</td>
+                        <td>: {{ $pembayaran->boking->no_blok }}</td>
                     </tr>
                     <tr>
                         <td><strong>Harga Tanah</strong></td>
-                        <td>: {{ "Rp " . number_format($pembelian->harga, 0, ',', '.') }}</td>
+                        <td>: {{ "Rp " . number_format($pembayaran->harga, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
                         <td><strong>Harga Boking</strong></td>
-                        <td>: {{ "Rp " . number_format($pembelian->boking->harga_boking, 0, ',', '.') }}</td>
+                        <td>: {{ "Rp " . number_format($pembayaran->boking->harga_boking, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
                         <td><strong>Dp</strong></td>
-                        <td>: {{ "Rp " . number_format($pembelian->dp, 0, ',', '.') }}</td>
+                        <td>: {{ "Rp " . number_format($pembayaran->dp, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
                         <td><strong>Jumlah Bulan Cicilan </strong></td>
-                        <td>: {{ $pembelian->jumlah_bulan_cicilan }} Bulan</td>
+                        <td>: {{ $pembayaran->jumlah_bulan_cicilan }} Bulan</td>
                     </tr>
                     <tr>
                         <td><strong>Status</strong></td>
                         <td>:
-                            @if ($pembelian->status === 'proses')
+                            @if ($pembayaran->status === 'proses')
                             <span class="badge bg-warning">PROSES</span>
-                            @elseif ($pembelian->status === 'selesai')
+                            @elseif ($pembayaran->status === 'selesai')
                             <span class="badge bg-success">SELESAI</span>
-                            @elseif ($pembelian->status === 'batal')
+                            @elseif ($pembayaran->status === 'batal')
                             <span class="badge bg-danger">BATAL</span>
                             @else
                             <span class="badge bg-secondary">Tidak Diketahui</span>
@@ -78,7 +78,7 @@ Detail Pembelian
 
             <h5 class="card-title">Data Cicilan</h5>
             <div class="row">
-                @foreach ($pembelian->cicilans as $cicilan)
+                @foreach ($pembayaran->cicilans as $cicilan)
                 <div class="col-md-4">
                     <div class="card mb-3">
                         <div class="card-body">
@@ -105,4 +105,6 @@ Detail Pembelian
     </div>
 
 </main>
+
+
 @endsection

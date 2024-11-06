@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\BokingController;
+use App\Http\Controllers\CicilanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KelolaBokingController;
 use App\Http\Controllers\KelolaKonsumenController;
 use App\Http\Controllers\kelolaPembayaranController;
 use App\Http\Controllers\KelolaProjectController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Cicilan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Crypt;
 
@@ -73,6 +76,12 @@ Route::middleware(['auth', 'role:konsumen'])->group(function () {
     Route::get('/profil', [ProfileController::class, 'index'])->name('profil');
     Route::put('/edit-profil', [ProfileController::class, 'update'])->name('profil.update');
     Route::put('/update-password', [ProfileController::class, 'updatePassword'])->name('password.update');
+
+    Route::get('/riwayat-boking', [BokingController::class, 'index'])->name('index.riwayat.boking');
+
+    Route::get('/pembayaran-kavling', [CicilanController::class, 'index'])->name('index.pembayaran.kavling');
+    Route::get('/pembayaran-kavling/{id}', [CicilanController::class, 'detail'])->name('pembayaran.kavling.detail');
+
 });
 
 // Route::middleware('auth')->group(function () {
