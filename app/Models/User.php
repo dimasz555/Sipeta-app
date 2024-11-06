@@ -38,4 +38,10 @@ class User extends Authenticatable implements LaratrustUser
     {
         return $this->hasMany(Boking::class);
     }
+
+    public function pembelians()
+    {
+        return $this->hasMany(Pembelian::class);
+    }
+
 }

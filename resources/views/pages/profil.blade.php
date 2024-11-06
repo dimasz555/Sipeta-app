@@ -12,8 +12,13 @@ Profil
         <h1>Profil</h1>
         <nav>
             <ol class="breadcrumb">
+                @if (auth()->user()->hasRole('admin'))
                 <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Home</a></li>
                 <li class="breadcrumb-item active">Profil</li>
+                @elseif (auth()->user()->hasRole('konsumen'))
+                <li class="breadcrumb-item"><a href="{{route('profil')}}">Home</a></li>
+                <li class="breadcrumb-item active">Profil</li>
+                @endif
             </ol>
         </nav>
     </div><!-- End Page Title -->
