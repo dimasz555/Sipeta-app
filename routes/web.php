@@ -6,9 +6,8 @@ use App\Http\Controllers\KelolaKonsumenController;
 use App\Http\Controllers\kelolaPembayaranController;
 use App\Http\Controllers\KelolaProjectController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Crypt;
 
 
 /*
@@ -60,9 +59,11 @@ Route::middleware('auth', 'role:admin')->group(function () {
     Route::post('/admin/kelola-boking/batal', [KelolaBokingController::class, 'cancelBoking'])->name('cancel.boking');
     Route::delete('/admin/kelola-boking/hapus', [KelolaBokingController::class, 'destroyBoking'])->name('hapus.boking');
 
-    Route::get('/admin/kelola-pembayaran', [kelolaPembayaranController::class, 'index'])->name('index.pembayaran');
-
-
+    Route::get('/admin/index-pembelian', [kelolaPembayaranController::class, 'index'])->name('index.pembelian');
+    Route::get('/search-user-boking', [kelolaPembayaranController::class, 'searchUserBoking'])->name('search.user.boking');
+    Route::post('/admin/index-pembelian/tambah', [kelolaPembayaranController::class, 'store'])->name('tambah.pembelian');
+    Route::get('/admin/index-pembelian/{id}', [kelolaPembayaranController::class, 'detail'])->name('pembelian.detail');
+    Route::put('/admin/index-pembelian/edit', [kelolaPembayaranController::class, 'update'])->name('edit.pembelian');
 
 });
 

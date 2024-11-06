@@ -70,7 +70,7 @@ h6 {
 /*--------------------------------------------------------------
 # Override some default Bootstrap stylings
 --------------------------------------------------------------*/
-/* Dropdown menus */
+Dropdown menus
 .dropdown-menu {
   border-radius: 4px;
   padding: 10px 0;
@@ -274,7 +274,7 @@ h6 {
 .breadcrumb {
   font-size: 14px;
   font-family: "Nunito", sans-serif;
-  color: #F7F7F7;
+  color: #b9babb;
   font-weight: 400;
 }
 
@@ -288,7 +288,7 @@ h6 {
 }
 
 .breadcrumb .breadcrumb-item::before {
-  color: #899bbd;
+  color: #000000;
 }
 
 .breadcrumb .active {
@@ -715,23 +715,24 @@ h6 {
   transition: 0.3;
   padding: 10px 0 10px 40px;
   transition: 0.3s;
+  visibility: visible;
 }
 
 .sidebar-nav .nav-content a i {
-  font-size: 6px;
+  font-size: 16px;
   margin-right: 8px;
   line-height: 0;
   border-radius: 50%;
 }
 
-.sidebar-nav .nav-content a:hover,
+/* .sidebar-nav .nav-content a:hover,
 .sidebar-nav .nav-content a.active {
   color: #4154f1;
 }
 
 .sidebar-nav .nav-content a.active i {
   background-color: #4154f1;
-}
+} */
 
 /*--------------------------------------------------------------
 # Dashboard
@@ -1023,8 +1024,6 @@ h6 {
 .profile .profile-edit img {
   max-width: 120px;
 }
-
-
 
 /*--------------------------------------------------------------
 # Error 404
