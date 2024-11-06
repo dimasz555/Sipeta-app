@@ -24,10 +24,9 @@ class kelolaPembayaranController extends Controller
             $user = User::all();
             $boking = Boking::where('status', 'lunas')->with('user')->get();
             $pembelian = Pembelian::all();
-            // $boking = Boking::orderBy('tgl_boking', 'desc')->get();
             // Enkripsi ID untuk setiap pembelian
-            foreach ($pembelian as $bk) {
-                $bk->encrypted_id = Crypt::encrypt($bk->id);
+            foreach ($pembelian as $pb) {
+                $pb->encrypted_id = Crypt::encrypt($pb->id);
             }
             return view('pages.admin.kelolaPembayaran', [
                 'boking' => $boking,
