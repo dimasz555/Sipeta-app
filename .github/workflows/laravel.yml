@@ -6,8 +6,32 @@ on:
       - main
 
 jobs:
-  build-test:
+  build:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, bcmath, pdo, pdo_mysql
+
+      - name: Copy .env file
+        run: cp .env.example .env
+
+      - name: Install dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Storage Permission
+        run: chmod -R 777 storage bootstrap/cache
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
     services:
       mysql:
         image: mysql:5.7
@@ -30,19 +54,6 @@ jobs:
           php-version: '8.1'
           extensions: mbstring, bcmath, pdo, pdo_mysql
 
-      - name: Copy .env file
-        run: cp .env.example .env
-
-      - name: Install dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
-      - name: Generate key
-        run: php artisan key:generate
-
-      - name: Storage Permission
-        run: chmod -R 777 storage bootstrap/cache
-
-      # Step 1: Run Initial Migrations Only
       - name: Initial Migration
         env:
           DB_CONNECTION: mysql
@@ -59,7 +70,6 @@ jobs:
           php artisan migrate --path=/database/migrations/2024_10_02_123932_laratrust_setup_tables.php
           php artisan migrate --path=/database/migrations/2024_10_03_044644_add_atribut_users.php
 
-      # Step 2: Run Roles Table Seeder
       - name: Run Roles Table Seeder
         env:
           DB_CONNECTION: mysql
@@ -70,7 +80,6 @@ jobs:
           DB_PASSWORD: passw0rd
         run: php artisan db:seed --class=RolesTableSeeder
 
-      # Step 3: Run Remaining Migrations
       - name: Full Migration and Seed
         env:
           DB_CONNECTION: mysql
@@ -84,8 +93,8 @@ jobs:
           php artisan db:seed
 
   deploy:
-    needs: build-test
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v2
 
