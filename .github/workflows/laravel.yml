@@ -1,4 +1,4 @@
-name: CI/CD workflow
+name: 🚀 Deploy website on push
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  migrate-seed:
+  web-deploy:
     runs-on: ubuntu-latest
     services:
       mysql:
