@@ -116,7 +116,7 @@ class KelolaBokingcontroller extends Controller
                 // Tidak memperbarui status
             ]);
 
-            Alert::toast('Data Boking Berhasil Diperbarui', 'success')->autoClose(10000);
+            Alert::toast('Data Boking Berhasil Diperbaharui', 'success')->autoClose(10000);
             return redirect()->back();
         } catch (\Exception $e) {
             Alert::toast('Terjadi Kesalahan: ' . $e->getMessage(), 'error')->autoClose(10000);

@@ -49,11 +49,27 @@
      </li>
 
      <li class="nav-item">
-       <a class="nav-link {{ request()->routeIs('index.pembayaran') ? 'active' : '' }}" href="{{ route('index.pembayaran') }}">
+       <a class="nav-link collapsed" data-bs-target="#kelolaPembayaran" data-bs-toggle="collapse" href="#">
          <i class="bi bi-cash-stack"></i>
          <span>Kelola Pembayaran</span>
+         <i class="bi bi-chevron-down ms-auto"></i>
        </a>
+       <ul id="kelolaPembayaran" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+         <li>
+           <a class="nav-link {{ request()->routeIs('index.pembelian') ? 'active' : '' }}" href="{{ route('index.pembelian') }}">
+             <i class="bi bi-file-earmark-text"></i>
+             <span>Index Pembelian</span>
+           </a>
+         </li>
+         <li>
+           <a class="nav-link">
+             <i class="bi bi-x-circle"></i>
+             <span>Pembatalan</span>
+           </a>
+         </li>
+       </ul>
      </li>
+
 
      <li>
        <a class="nav-link {{ request()->routeIs('logout') ? 'active' : '' }}" href="{{ route('logout') }}" class="nav-link scrollto" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
