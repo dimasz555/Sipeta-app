@@ -118,6 +118,15 @@ jobs:
           php artisan migrate --path=/database/migrations
           php artisan db:seed
 
+      # Step 4: Wait for MySQL to be fully ready
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysqladmin ping -h 127.0.0.1 --silent; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 5
+          done
+
+      # Step 5: Execute Tests
       - name: Execute Tests
         env:
           DB_CONNECTION: mysql
