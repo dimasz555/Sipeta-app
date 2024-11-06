@@ -123,7 +123,7 @@ Kelola Project
                         <div class="col-12">
                             <label class="form-label" for="name">Lokasi</label>
                             <div class="input-group input-group-merge">
-                                <input id="name" name="lokasi" class="form-control" type="text" required />
+                                <input id="lokasi" name="lokasi" class="form-control" type="text" required />
                             </div>
                         </div>
 

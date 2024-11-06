@@ -14,4 +14,9 @@ class Project extends Model
         'name',
         'lokasi',
     ];
+
+    public function bokings()
+    {
+        return $this->hasMany(Boking::class);
+    }
 }

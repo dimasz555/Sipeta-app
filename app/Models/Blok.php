@@ -13,4 +13,9 @@ class Blok extends Model
     protected $fillable = [
         'blok',
     ];
+
+    public function bokings()
+    {
+        return $this->hasMany(Boking::class);
+    }
 }
