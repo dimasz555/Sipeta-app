@@ -1,12 +1,12 @@
-on: 
+name: CI/CD workflow
+
+on:
   push:
     branches:
       - main
-name: 🚀 Deploy website on push
 
 jobs:
-  web-deploy:
-    name: 🎉 Deploy website
+  migrate-seed:
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -21,64 +21,78 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
+
     steps:
-    # Step 1: Checkout the repository
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
-    # Step 2: Setup PHP
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1'
-        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, mysql, bcmath, soap, intl, gd, exif, iconv
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, bcmath, pdo, pdo_mysql
 
-    # Step 3: Copy .env file
-    - name: Copy .env file
-      run: cp .env.example .env
+      - name: Copy .env file
+        run: cp .env.example .env
 
-    # Step 4: Install dependencies
-    - name: Install dependencies
-      run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Install dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-    # Step 5: Generate application key
-    - name: Generate key
-      run: php artisan key:generate
+      - name: Generate key
+        run: php artisan key:generate
 
-    # Step 6: Set storage permissions
-    - name: Set storage permissions
-      run: chmod -R 777 storage bootstrap/cache
+      - name: Storage Permission
+        run: chmod -R 777 storage bootstrap/cache
 
-    # Step 7: Wait for MySQL to be ready
-    - name: Wait for MySQL to be ready
-      run: sleep 15
+      # Step 1: Run Initial Migrations Only
+      - name: Initial Migration
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel
+          DB_USERNAME: root
+          DB_PASSWORD: passw0rd
+        run: |
+          php artisan migrate --path=/database/migrations/2014_10_12_000000_create_users_table.php
+          php artisan migrate --path=/database/migrations/2014_10_12_100000_create_password_reset_tokens_table.php
+          php artisan migrate --path=/database/migrations/2019_08_19_000000_create_failed_jobs_table.php
+          php artisan migrate --path=/database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php
+          php artisan migrate --path=/database/migrations/2024_10_02_123932_laratrust_setup_tables.php
+          php artisan migrate --path=/database/migrations/2024_10_03_044644_add_atribut_users.php
 
-    # Step 8: Run database migration and seeding
-    - name: Run migrations and seed database
-      env:
-        DB_CONNECTION: mysql
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        DB_DATABASE: laravel
-        DB_USERNAME: root
-        DB_PASSWORD: passw0rd
-      run: php artisan migrate:fresh --seed
+      # Step 2: Run Roles Table Seeder
+      - name: Run Roles Table Seeder
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel
+          DB_USERNAME: root
+          DB_PASSWORD: passw0rd
+        run: php artisan db:seed --class=RolesTableSeeder
 
-    # Step 9: Run tests (Unit and Feature tests)
-    - name: Run tests
-      env:
-        DB_CONNECTION: mysql
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        DB_DATABASE: laravel
-        DB_USERNAME: root
-        DB_PASSWORD: passw0rd
-      run: php artisan test
+      # Step 3: Run Remaining Migrations
+      - name: Full Migration and Seed
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel
+          DB_USERNAME: root
+          DB_PASSWORD: passw0rd
+        run: |
+          php artisan migrate --path=/database/migrations
+          php artisan db:seed
 
-    # Step 10: Deploy via FTP
-    - name: 📂 Sync files via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_PASS }}
+  deploy:
+    needs: migrate-seed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy code via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
