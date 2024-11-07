@@ -50,7 +50,7 @@ Kelola Pembelian
                         <td>
                             @if ($bk->status === 'proses')
                             <x-badge-status class="bg-warning">PROSES</x-badge-status>
-                            @elseif ($bk->status === 'slesai')
+                            @elseif ($bk->status === 'selesai')
                             <x-badge-status class="bg-success">SELESAI</x-badge-status>
                             @elseif ($bk->status === 'batal')
                             <x-badge-status class="bg-danger">BATAL</x-badge-status>

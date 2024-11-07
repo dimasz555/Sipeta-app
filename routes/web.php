@@ -8,7 +8,6 @@ use App\Http\Controllers\KelolaKonsumenController;
 use App\Http\Controllers\kelolaPembayaranController;
 use App\Http\Controllers\KelolaProjectController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Cicilan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Crypt;
 
@@ -23,11 +22,6 @@ use Illuminate\Support\Facades\Crypt;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-// Route::get('/tes', function () {
-//     Alert::error('Success Title','Success Message');
-//     return view('welcome');
-// });
 
 // Route::get('/error', function () {
 //     // This route does not exist and will trigger the 404 page
@@ -83,11 +77,5 @@ Route::middleware(['auth', 'role:konsumen'])->group(function () {
     Route::get('/pembayaran-kavling/{id}', [CicilanController::class, 'detail'])->name('pembayaran.kavling.detail');
 
 });
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
 
 require __DIR__ . '/auth.php';
