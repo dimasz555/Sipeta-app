@@ -30,7 +30,6 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
 
   tests:
-    name: Run tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -57,7 +56,7 @@ jobs:
           key: yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Run yarn
-        run: yarn && yarn dev
+        run: yarn && yarn build
 
       - name: Run tests
         run: ./vendor/bin/phpunit
