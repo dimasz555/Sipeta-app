@@ -23,7 +23,7 @@ jobs:
         run: php artisan key:generate
       - name: Storage Permission
         run: chmod -R 777 storage bootstrap/cache
-
+        
   test:
     runs-on: ubuntu-latest
     needs: build
@@ -36,9 +36,9 @@ jobs:
         ports:
           - 3306:3306
         options: >
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
+          --health-cmd="mysqladmin ping" 
+          --health-interval=10s 
+          --health-timeout=5s 
           --health-retries=3
     steps:
       - uses: actions/checkout@v2
