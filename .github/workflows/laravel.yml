@@ -60,28 +60,40 @@ jobs:
           APP_ENV: testing
 
       - name: Prepare Laravel Application
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel
+          DB_USERNAME: root
+          DB_PASSWORD: passw0rd
         run: |
-          cp .env.example .env
-          php artisan key:generate
-          php artisan config:cache
-          # Jalankan migrasi database secara berurutan
           php artisan migrate --path=/database/migrations/2014_10_12_000000_create_users_table.php --force
           php artisan migrate --path=/database/migrations/2014_10_12_100000_create_password_reset_tokens_table.php --force
           php artisan migrate --path=/database/migrations/2019_08_19_000000_create_failed_jobs_table.php --force
           php artisan migrate --path=/database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php --force
           php artisan migrate --path=/database/migrations/2024_10_02_123932_laratrust_setup_tables.php --force
           php artisan migrate --path=/database/migrations/2024_10_03_044644_add_atribut_users.php --force
-          # Seed roles table
-          php artisan db:seed --class=RolesTableSeeder --force
-          # Full migrate
-          php artisan migrate --force
+
+      - name: Run Roles Table Seeder
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
-          DB_DATABASE: sipeta
+          DB_DATABASE: laravel
           DB_USERNAME: root
-          DB_PASSWORD: root
+          DB_PASSWORD: passw0rd
+        run: php artisan db:seed --class=RolesTableSeeder --force
+
+      - name: Full Migration
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel
+          DB_USERNAME: root
+          DB_PASSWORD: passw0rd
+        run: php artisan migrate --force
 
       - name: Cache yarn dependencies
         uses: actions/cache@v2
