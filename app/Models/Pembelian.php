@@ -37,4 +37,9 @@ class Pembelian extends Model
     {
         return $this->hasMany(Cicilan::class);
     }
+
+    public function pembatalan()
+    {
+        return $this->hasOne(Pembatalan::class);
+    }
 }

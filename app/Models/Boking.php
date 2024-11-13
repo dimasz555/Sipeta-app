@@ -35,4 +35,9 @@ class Boking extends Model
     {
         return $this->belongsTo(Blok::class);
     }
+
+    public function pembelian()
+    {
+        return $this->hasOne(Pembelian::class);
+    }
 }

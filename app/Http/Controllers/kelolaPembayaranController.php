@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Storage;
 
 class kelolaPembayaranController extends Controller
 {
@@ -22,8 +23,12 @@ class kelolaPembayaranController extends Controller
     {
         try {
             $user = User::all();
-            $boking = Boking::where('status', 'lunas')->with('user')->get();
+            $boking = Boking::where('status', 'lunas')
+                ->with('user')
+                ->orderBy('tgl_boking', 'desc')
+                ->get();
             $pembelian = Pembelian::all();
+            $pembelian = Pembelian::orderBy('tgl_pembelian', 'desc')->get();
             // Enkripsi ID untuk setiap pembelian
             foreach ($pembelian as $pb) {
                 $pb->encrypted_id = Crypt::encrypt($pb->id);
@@ -66,6 +71,31 @@ class kelolaPembayaranController extends Controller
     public function store(Request $request)
     {
         try {
+            $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'boking_id' => 'required|exists:bokings,id',
+                'harga' => 'required|integer',
+                'dp' => 'required|integer',
+                'jumlah_bulan_cicilan' => 'required|integer',
+                'harga_cicilan_perbulan' => 'required|integer',
+                'pjb' => 'nullable|file|mimes:pdf|max:6048',
+            ]);
+
+            // Inisialisasi variabel
+            $filePath = null;
+
+            if ($request->hasFile('pjb')) {
+                // Ambil nama asli file
+                $originalName = $request->file('pjb')->getClientOriginalName();
+
+                // Buat nama file baru dengan format yang diinginkan
+                $filename = 'pjb_' . $request->user_id . '_' . Carbon::now()->timestamp . '_' . Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.pdf';
+
+                // Simpan file dengan nama baru
+                $filePath = $request->file('pjb')->storeAs('pjb_files', $filename, 'public');
+            }
+            // dd($filePath);
+
             // Simpan data pembelian ke database
             $pembelian = Pembelian::create([
                 'user_id' => $request->user_id,
@@ -75,6 +105,7 @@ class kelolaPembayaranController extends Controller
                 'dp' => $request->dp,
                 'jumlah_bulan_cicilan' => $request->jumlah_bulan_cicilan,
                 'harga_cicilan_perbulan' => $request->harga_cicilan_perbulan,
+                'pjb' => $filePath,
                 'status' => 'proses'
             ]);
 
@@ -105,6 +136,7 @@ class kelolaPembayaranController extends Controller
                     'tahun' => $tahunCicilan
                 ]);
             }
+            // dd($pembelian);
 
             Alert::toast('Data Pembelian Berhasil Ditambah', 'success')->autoClose(10000);
             return redirect()->back();
@@ -144,23 +176,32 @@ class kelolaPembayaranController extends Controller
                 'dp' => 'required|integer|min:0',
                 'jumlah_bulan_cicilan' => 'required|integer|min:1',
                 'harga_cicilan_perbulan' => 'required|integer|min:1',
+                'pjb' => 'nullable|mimes:pdf|max:6048',
             ]);
 
             $pembelian = Pembelian::findOrFail($request->id);
 
-            // Check if harga_cicilan_perbulan has changed
+            // cek jika harga cicilan perbulan berubah
             $hargaCicilanPerbulanChanged = $pembelian->harga_cicilan_perbulan != $request->harga_cicilan_perbulan;
 
-            // Update pembelian record
-            $pembelian->update([
+            // Inisialisasi variabel
+            $dataToUpdate = [
                 'user_id' => $request->user_id,
                 'harga' => $request->harga,
                 'boking_id' => $request->boking_id,
                 'dp' => $request->dp,
                 'jumlah_bulan_cicilan' => $request->jumlah_bulan_cicilan,
                 'harga_cicilan_perbulan' => $request->harga_cicilan_perbulan,
-            ]);
+            ];
 
+            if ($request->hasFile('pjb')) {
+                $originalName = $request->file('pjb')->getClientOriginalName();
+                $filename = 'pjb_' . $request->user_id . '_' . Carbon::now()->timestamp . '_' . Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.pdf';
+                $filePath = $request->file('pjb')->storeAs('pjb_files', $filename, 'public');
+                $dataToUpdate['pjb'] = $filePath; // tambahkan jika ada file
+            }
+
+            $pembelian->update($dataToUpdate);
             // If harga_cicilan_perbulan changed, update existing cicilan records
             if ($hargaCicilanPerbulanChanged) {
                 $pembelian->cicilans()->update([
@@ -168,17 +209,17 @@ class kelolaPembayaranController extends Controller
                 ]);
             }
 
-            // Adjust cicilan records if jumlah_bulan_cicilan was modified
+            // menghitung jumlah cicilan yang diperbaharui
             $currentCicilanCount = $pembelian->cicilans->count();
 
             if ($request->jumlah_bulan_cicilan < $currentCicilanCount) {
-                // Delete excess cicilan records if jumlah_bulan_cicilan decreased
+                // menghapus no cicicilan jika bulan cicilan dikurangi
                 $pembelian->cicilans()->where('no_cicilan', '>', $request->jumlah_bulan_cicilan)->delete();
             } elseif ($request->jumlah_bulan_cicilan > $currentCicilanCount) {
-                // Add additional cicilan records if jumlah_bulan_cicilan increased
+                // mendapatkan harga cicilan 
                 $hargaCicilanPerBulan = $pembelian->harga_cicilan_perbulan;
 
-                // Get the month and year of the last cicilan
+                // mendapatkan bulan dan tahun cicilan 
                 $lastCicilan = $pembelian->cicilans()->orderBy('no_cicilan', 'desc')->first();
                 $nextMonth = $lastCicilan ? $lastCicilan->bulan : now()->month;
                 $nextYear = $lastCicilan ? $lastCicilan->tahun : now()->year;
