@@ -58,8 +58,6 @@ jobs:
           while ! mysqladmin ping -h 127.0.0.1 -u root --password=password; do
             sleep 1
           done
-      - name: Clear Config Cache
-        run: php artisan config:clear
       - name: Configure Database
         run: |
           php artisan config:clear
