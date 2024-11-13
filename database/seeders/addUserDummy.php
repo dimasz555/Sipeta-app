@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 
-class addUserDummy extends Seeder
+class AddUserDummy extends Seeder
 {
     /**
      * Run the database seeds.

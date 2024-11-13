@@ -355,7 +355,7 @@ Kelola Boking
                     <table class="table table-borderless">
                         <tbody>
                             <tr>
-                                <td><strong>Nama Pengguna</strong></td>
+                                <td><strong>Nama Konsumen</strong></td>
                                 <td><span id="hapus_user_name"></span></td>
                             </tr>
                             <tr>
