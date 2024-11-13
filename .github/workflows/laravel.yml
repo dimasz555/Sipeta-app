@@ -92,6 +92,20 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: passw0rd
         run: php artisan migrate --force
+      
+      - name: Install Chrome
+        run: sudo apt-get install -y google-chrome-stable
+
+      - name: Run Dusk Tests
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel
+          DB_USERNAME: root
+          DB_PASSWORD: passw0rd
+          APP_URL: http://127.0.0.1:8000
+        run: php artisan dusk
 
   deploy:
     runs-on: ubuntu-latest
