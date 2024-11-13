@@ -12,7 +12,7 @@ Detail Pembelian
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('index.pembelian') }}">Index Pembelian</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('index.pembelian') }}">Kelola Pembelian</a></li>
                 <li class="breadcrumb-item active">Detail Pembelian</li>
             </ol>
         </nav>

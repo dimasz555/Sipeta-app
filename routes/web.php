@@ -5,6 +5,7 @@ use App\Http\Controllers\CicilanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KelolaBokingController;
 use App\Http\Controllers\KelolaKonsumenController;
+use App\Http\Controllers\KelolaPembatalanController;
 use App\Http\Controllers\kelolaPembayaranController;
 use App\Http\Controllers\KelolaProjectController;
 use App\Http\Controllers\ProfileController;
@@ -56,11 +57,14 @@ Route::middleware('auth', 'role:admin')->group(function () {
     Route::post('/admin/kelola-boking/batal', [KelolaBokingController::class, 'cancelBoking'])->name('cancel.boking');
     Route::delete('/admin/kelola-boking/hapus', [KelolaBokingController::class, 'destroyBoking'])->name('hapus.boking');
 
-    Route::get('/admin/index-pembelian', [kelolaPembayaranController::class, 'index'])->name('index.pembelian');
+    Route::get('/admin/kelola-pembelian', [kelolaPembayaranController::class, 'index'])->name('index.pembelian');
     Route::get('/search-user-boking', [kelolaPembayaranController::class, 'searchUserBoking'])->name('search.user.boking');
-    Route::post('/admin/index-pembelian/tambah', [kelolaPembayaranController::class, 'store'])->name('tambah.pembelian');
-    Route::get('/admin/index-pembelian/{id}', [kelolaPembayaranController::class, 'detail'])->name('pembelian.detail');
-    Route::put('/admin/index-pembelian/edit', [kelolaPembayaranController::class, 'update'])->name('edit.pembelian');
+    Route::post('/admin/kelola-pembelian/tambah', [kelolaPembayaranController::class, 'store'])->name('tambah.pembelian');
+    Route::get('/admin/kelola-pembelian/{id}', [kelolaPembayaranController::class, 'detail'])->name('pembelian.detail');
+    Route::put('/admin/kelola-pembelian/edit', [kelolaPembayaranController::class, 'update'])->name('edit.pembelian');
+
+    Route::get('/admin/kelola-pembatalan', [KelolaPembatalanController::class, 'index'])->name('index.pembatalan');
+
 
 });
 

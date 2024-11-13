@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -14,16 +15,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $user = User::create([
-            'name' => 'Rizki Dermawan',
-            'username' => 'admin123',
-            'phone' => '085821497721',
-            'password' => Hash::make('admin123'),
+         // role admin
+         DB::table('roles')->updateOrInsert([
+            'name' => 'admin',
         ]);
 
-
-        $administrator = Role::where('name','admin')->first();
-        $user->addRole($administrator);
+        // Membuat role guru
+        DB::table('roles')->updateOrInsert([
+            'name' => 'konsumen',
+        ]);
     }
 
     /**

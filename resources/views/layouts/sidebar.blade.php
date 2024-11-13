@@ -48,11 +48,11 @@
          <li>
            <a class="nav-link {{ request()->routeIs('index.pembelian') ? 'active' : '' }}" href="{{ route('index.pembelian') }}">
              <i class="bi bi-file-earmark-text"></i>
-             <span>Index Pembelian</span>
+             <span>Kelola Pembelian</span>
            </a>
          </li>
          <li>
-           <a class="nav-link">
+           <a class="nav-link {{ request()->routeIs('index.pembatalan') ? 'active' : '' }}" href="{{ route('index.pembatalan') }}">
              <i class="bi bi-x-circle"></i>
              <span>Pembatalan</span>
            </a>
