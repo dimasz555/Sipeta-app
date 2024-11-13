@@ -29,87 +29,51 @@ jobs:
       - name: Storage Permission
         run: chmod -R 777 storage bootstrap/cache
 
-  test:
+  tests:
+    name: Run tests
     runs-on: ubuntu-latest
-    needs: build
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: passw0rd
-          MYSQL_DATABASE: laravel
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
         with:
-          php-version: '8.1'
-          extensions: mbstring, bcmath, pdo, pdo_mysql
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
 
-      - name: Install dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
-      - name: Initial Migrations
+      - name: Run composer install
+        run: composer install -n --prefer-dist
         env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel
-          DB_USERNAME: root
-          DB_PASSWORD: passw0rd
+          APP_ENV: testing
+
+      - name: Prepare Laravel Application
         run: |
-          php artisan migrate --path=/database/migrations/2014_10_12_000000_create_users_table.php --force
-          php artisan migrate --path=/database/migrations/2014_10_12_100000_create_password_reset_tokens_table.php --force
-          php artisan migrate --path=/database/migrations/2019_08_19_000000_create_failed_jobs_table.php --force
-          php artisan migrate --path=/database/migrations/2019_12_14_000001_create_personal_access_tokens_table.php --force
-          php artisan migrate --path=/database/migrations/2024_10_02_123932_laratrust_setup_tables.php --force
-          php artisan migrate --path=/database/migrations/2024_10_03_044644_add_atribut_users.php --force
+          cp .env.example .env
+          php artisan key:generate
+      - name: Cache yarn dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: yarn-${{ hashFiles('yarn.lock') }}
 
-      - name: Run Roles Table Seeder
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel
-          DB_USERNAME: root
-          DB_PASSWORD: passw0rd
-        run: php artisan db:seed --class=RolesTableSeeder --force
+      - name: Run yarn
+        run: yarn && yarn dev
 
-      - name: Full Migration
+      - name: Run tests
+        run: ./vendor/bin/phpunit
         env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel
-          DB_USERNAME: root
-          DB_PASSWORD: passw0rd
-        run: php artisan migrate --force
-      
-      - name: Install Chrome
-        run: sudo apt-get install -y google-chrome-stable
+          APP_ENV: testing
 
-      - name: Run Dusk Tests
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel
-          DB_USERNAME: root
-          DB_PASSWORD: passw0rd
-          APP_URL: http://127.0.0.1:8000
-        run: php artisan dusk
+      - name: Upload artifacts
+        uses: actions/upload-artifact@master
+        if: failure()
+        with:
+          name: Logs
+          path: ./storage/logs
 
   deploy:
     runs-on: ubuntu-latest
-    needs: test
+    needs: tests
     steps:
       - uses: actions/checkout@v2
 
