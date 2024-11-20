@@ -94,7 +94,7 @@ Detail Pembelian
                             <h5 class="card-title">Cicilan ke-{{ $cicilan->no_cicilan }}</h5>
                             <div class="row mb-1 align-items-center">
                                 <div class="col-6 d-flex justify-content-between">
-                                    <strong>No Transaksi:</strong>
+                                    <strong>No Transaksi</strong>
                                     <span>:</span>
                                 </div>
                                 <div class="col-6">
@@ -103,7 +103,7 @@ Detail Pembelian
                             </div>
                             <div class="row mb-1 align-items-center">
                                 <div class="col-6 d-flex justify-content-between">
-                                    <strong>Bulan:</strong>
+                                    <strong>Bulan</strong>
                                     <span>:</span>
                                 </div>
                                 <div class="col-6">
@@ -112,7 +112,7 @@ Detail Pembelian
                             </div>
                             <div class="row mb-1 align-items-center">
                                 <div class="col-6 d-flex justify-content-between">
-                                    <strong>Harga Cicilan:</strong>
+                                    <strong>Harga Cicilan</strong>
                                     <span>:</span>
                                 </div>
                                 <div class="col-6">
@@ -121,7 +121,7 @@ Detail Pembelian
                             </div>
                             <div class="row mb-1 align-items-center">
                                 <div class="col-6 d-flex justify-content-between">
-                                    <strong>Tanggal Bayar:</strong>
+                                    <strong>Tanggal Bayar</strong>
                                     <span>:</span>
                                 </div>
                                 <div class="col-6">
@@ -134,7 +134,7 @@ Detail Pembelian
                             </div>
                             <div class="row mb-1 align-items-center">
                                 <div class="col-6 d-flex justify-content-between">
-                                    <strong>Status:</strong>
+                                    <strong>Status</strong>
                                     <span>:</span>
                                 </div>
                                 <div class="col-6">
