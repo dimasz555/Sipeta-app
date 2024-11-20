@@ -19,7 +19,7 @@ Pembayaran Kavling
 
     <div class="container">
         @if($pembayaran->isEmpty())
-        <p>Tidak ada data.</p>
+        <p>Tidak Ada Data Pembayaran.</p>
         @else
         <div class="row">
             @foreach($pembayaran as $pb)
@@ -68,6 +68,20 @@ Pembayaran Kavling
                                 <span>:</span>
                             </div>
                             <div class="col-6">{{ $pb->tgl_lunas ? \Carbon\Carbon::parse($pb->tgl_lunas)->translatedFormat('j F Y') : '-' }}</div>
+                        </div>
+                        <div class="row mb-1 align-items-center">
+                            <div class="col-6 d-flex justify-content-between">
+                                <strong>PJB</strong>
+                                <span>:</span>
+                            </div>
+                            <div class="col-6">@if($pb->pjb)
+                                <a href="{{ asset('storage/' . $pb->pjb) }}" target="_blank" class="text-primary" style="text-decoration: underline;">
+                                    Lihat PJB
+                                </a>
+                                @else
+                                -
+                                @endif
+                            </div>
                         </div>
                         <div class="row mb-1 align-items-center">
                             <div class="col-6 d-flex justify-content-between">

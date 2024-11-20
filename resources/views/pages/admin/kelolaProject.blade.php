@@ -21,7 +21,10 @@ Kelola Project
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Data Project</h5>
-            <x-primary-button class="w-full flex justify-center items-center" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#addProject" style="width: 200px;">Tambah Project</x-primary-button>
+            <x-primary-button class="w-full flex justify-center items-center gap-2" style="width: 200px;" title="Tambah Project" data-bs-toggle="modal" data-bs-target="#addProject">
+                <i class="bi bi-plus-lg"></i>
+                Tambah Project
+            </x-primary-button>
         </div>
 
         <div class="table-responsive">
@@ -63,7 +66,10 @@ Kelola Project
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Data Blok</h5>
-            <x-primary-button class="w-full flex justify-center items-center" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#addBlok" style="width: 200px;">Tambah Blok</x-primary-button>
+            <x-primary-button class="w-full flex justify-center items-center gap-2" style="width: 200px;" title="Tambah Blok" data-bs-toggle="modal" data-bs-target="#addBlok">
+                <i class="bi bi-plus-lg"></i>
+                Tambah Project
+            </x-primary-button>
         </div>
 
         <div class="table-responsive">

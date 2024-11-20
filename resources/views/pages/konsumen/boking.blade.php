@@ -19,7 +19,7 @@ Riwayat Boking
 
     <div class="container">
         @if($boking->isEmpty())
-        <p>Tidak ada data.</p>
+        <p>Tidak Ada Data Boking.</p>
         @else
         <div class="row">
             @foreach($boking as $boking)

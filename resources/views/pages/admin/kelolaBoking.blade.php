@@ -20,7 +20,10 @@ Kelola Boking
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Data Boking</h5>
-            <x-primary-button class="w-full flex justify-center items-center" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#addBoking">Tambah Boking</x-primary-button>
+            <x-primary-button class="w-full flex justify-center items-center gap-2" style="width: 200px;" title="Tambah Boking" data-bs-toggle="modal" data-bs-target="#addBoking">
+                <i class="bi bi-plus-lg"></i>
+                Tambah Boking
+            </x-primary-button>
         </div>
 
         <div class="table-responsive">
@@ -49,7 +52,12 @@ Kelola Boking
                         <td>{{ $bk->blok->blok }}</td>
                         <td>{{ $bk->no_blok }}</td>
                         <td>{{ "Rp ". number_format($bk->harga_boking, 0, ',', '.') }}</td>
-                        <td>{{ $bk->tgl_lunas }}</td>
+                        <td> @if($bk->tgl_lunas)
+                            {{ \Carbon\Carbon::parse($bk->tgl_lunas)->translatedFormat('j F Y') }}
+                            @else
+                            -
+                            @endif
+                        </td>
                         <td>
                             @if ($bk->status === 'proses')
                             <x-badge-status class="bg-warning">PROSES</x-badge-status>

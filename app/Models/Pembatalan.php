@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
+
 
 class Pembatalan extends Model
 {
@@ -15,6 +17,12 @@ class Pembatalan extends Model
         'tgl_pembatalan',
         'jumlah_pengembalian',
     ];
+
+     // Menambahkan accessor untuk encrypted_id
+     public function getEncryptedIdAttribute()
+     {
+         return Crypt::encrypt($this->id);
+     }
 
     public function pembelian()
     {

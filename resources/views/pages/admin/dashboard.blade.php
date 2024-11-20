@@ -2,7 +2,7 @@
 
 
 @section('title')
-    Dashboard
+Dashboard
 @endsection
 
 @section('content')
@@ -23,9 +23,8 @@
         <div class="row">
 
             <!-- Left side columns -->
-            <div class="col-lg-9">
+            <div class="col-lg-8">
                 <div class="row">
-
                     <!-- Users Card -->
                     <div class="col-xxl-4 col-md-6">
                         <div class="card info-card sales-card">
@@ -36,9 +35,7 @@
                                         <i class="bi bi-people"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{ $totalUsers }} User</h6>
-                                        <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
+                                        <h6 class="fs-4">{{ $totalUsers }} User</h6>
                                     </div>
                                 </div>
                             </div>
@@ -56,9 +53,7 @@
                                         <i class="bi bi-people"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{ $totalAdmin }} Admin</h6>
-                                        <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
-
+                                        <h6 class="fs-4">{{ $totalAdmin }} Admin</h6>
                                     </div>
                                 </div>
                             </div>
@@ -79,9 +74,7 @@
                                         <i class="bi bi-people"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{$totalKonsumen}} Konsumen</h6>
-                                        <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
-
+                                        <h6 class="fs-4">{{$totalKonsumen}} Konsumen</h6>
                                     </div>
                                 </div>
 
@@ -113,58 +106,7 @@
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
 
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", () => {
-                                        new ApexCharts(document.querySelector("#reportsChart"), {
-                                            series: [{
-                                                name: 'Sales',
-                                                data: [31, 40, 28, 51, 42, 82, 56],
-                                            }, {
-                                                name: 'Revenue',
-                                                data: [11, 32, 45, 32, 34, 52, 41]
-                                            }, {
-                                                name: 'Customers',
-                                                data: [15, 11, 32, 18, 9, 24, 11]
-                                            }],
-                                            chart: {
-                                                height: 350,
-                                                type: 'area',
-                                                toolbar: {
-                                                    show: false
-                                                },
-                                            },
-                                            markers: {
-                                                size: 4
-                                            },
-                                            colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                                            fill: {
-                                                type: "gradient",
-                                                gradient: {
-                                                    shadeIntensity: 1,
-                                                    opacityFrom: 0.3,
-                                                    opacityTo: 0.4,
-                                                    stops: [0, 90, 100]
-                                                }
-                                            },
-                                            dataLabels: {
-                                                enabled: false
-                                            },
-                                            stroke: {
-                                                curve: 'smooth',
-                                                width: 2
-                                            },
-                                            xaxis: {
-                                                type: 'datetime',
-                                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                                            },
-                                            tooltip: {
-                                                x: {
-                                                    format: 'dd/MM/yy HH:mm'
-                                                },
-                                            }
-                                        }).render();
-                                    });
-                                </script>
+
                                 <!-- End Line Chart -->
 
                             </div>
@@ -176,7 +118,28 @@
             </div><!-- End Left side columns -->
 
             <!-- Right side columns -->
-            <!-- -->
+            <div class="col-lg-4">
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Aktivitas Terbaru</h5>
+                        <div class="activity">
+                            @foreach ($recentActivities as $activity)
+                            <div class="activity-item d-flex">
+                                <i class="bi bi-circle-fill activity-badge text-success align-self-start"></i>
+                                <div class="activity-content">
+                                    {{ $activity->pembelian->user->name }} melakukan pembayaran cicilan ke-{{ $activity->no_cicilan }} pada
+                                    {{ $activity->tgl_bayar->format('d F Y') }} pukul
+                                    {{ $activity->tgl_bayar->format('H:i') }}
+                                    <span class="text-muted" style="font-size: 90%;"> ({{ $activity->tgl_bayar->diffForHumans() }}) </span>
+                                </div>
+                            </div><!-- End activity item-->
+                            @endforeach
+                        </div>
+                    </div>
+                </div><!-- End Recent Activity -->
+            </div><!-- End Right side columns -->
 
         </div>
     </section>

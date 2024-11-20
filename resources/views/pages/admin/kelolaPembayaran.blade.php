@@ -21,7 +21,11 @@ Kelola Pembelian
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Data Pembelian</h5>
-            <x-primary-button class="w-full flex justify-center items-center" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#addPembelian">Tambah Pembelian</x-primary-button>
+            <x-primary-button class="w-full flex justify-center items-center gap-2" style="width: 200px;" title="Tambah Pembelian" data-bs-toggle="modal" data-bs-target="#addPembelian">
+                <i class="bi bi-plus-lg"></i>
+                Tambah Pembelian
+            </x-primary-button>
+
         </div>
 
         <div class="table-responsive">
@@ -30,6 +34,7 @@ Kelola Pembelian
                     <tr>
                         <th>No</th>
                         <th>Tanggal Pembelian</th>
+                        <th>Tanggal Lunas</th>
                         <th>Nama</th>
                         <th>Project</th>
                         <th>Nomor Blok</th>
@@ -43,8 +48,9 @@ Kelola Pembelian
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ \Carbon\Carbon::parse($bk->tgl_pembelian)->translatedFormat('j F Y') }}</td>
+                        <td>{{ $bk->tgl_lunas ? \Carbon\Carbon::parse($bk->tgl_lunas)->translatedFormat('j F Y') : '-' }}</td>
                         <td>{{ $bk->user->name }}</td>
-                        <td>{{ $bk->boking->project->name ?? 'Tidak Diketahui' }}</td> <!-- Mengambil nama proyek dari boking -->
+                        <td>{{ $bk->boking->project->name }}</td>
                         <td>{{ $bk->boking->no_blok }}</td>
                         <td>{{ "Rp ". number_format($bk->harga, 0, ',', '.') }}</td>
                         <td>
@@ -64,9 +70,10 @@ Kelola Pembelian
                                 <a href="{{ route('pembelian.detail', $bk->encrypted_id) }}" class="text-white"><i class="bi bi-eye"></i></a>
                             </x-button-action>
                             @if ($bk->pjb)
-                            <x-button-action style="background-color: #BC55C3;" data-bs-toggle="modal" data-bs-target="#viewPjbModal"
-                                data-pjb="{{ asset('storage/' . $bk->pjb) }}" title="Lihat PJB" class="text-white">
-                                <i class="bi bi-file-text"></i>
+                            <x-button-action style="background-color: #BC55C3;" title="Lihat PJB" class="text-white">
+                                <a href="{{ asset('storage/' . $bk->pjb) }}" target="_blank" class="text-white">
+                                    <i class="bi bi-file-text"></i>
+                                </a>
                             </x-button-action>
                             @endif
                             <x-button-action style="background-color: #BC55C3;" data-bs-toggle="modal" data-bs-target="#editPembelianModal"
@@ -82,6 +89,7 @@ Kelola Pembelian
                                 title="Edit Data Pembelian">
                                 <i class="bi bi-pencil text-white"></i>
                             </x-button-action>
+                            @if ($bk->status !== 'batal')
                             <x-button-action style="background-color: #E33437;" data-bs-toggle="modal" data-bs-target="#pembatalanModal"
                                 data-id="{{ $bk->id }}"
                                 data-user-name="{{ $bk->user->name }}"
@@ -92,6 +100,7 @@ Kelola Pembelian
                                 title="Batalkan Pembelian">
                                 <i class="bi bi-x text-white"></i>
                             </x-button-action>
+                            @endif
                         </td>
                     </tr>
                     @empty
@@ -105,7 +114,7 @@ Kelola Pembelian
 
     <!-- Modal Tambah Pembelian -->
     <div class="modal fade" id="addPembelian" tabindex="-1" aria-labelledby="addPembelianLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -161,12 +170,12 @@ Kelola Pembelian
 
     <!-- Modal Edit Pembelian -->
     <div class="modal fade" id="editPembelianModal" tabindex="-1" aria-labelledby="editPembelianModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="formEditPembelian" method="POST" action="{{ route('edit.pembelian') }}" enctype="multipart/form-data">>
+                <form id="formEditPembelian" method="POST" action="{{ route('edit.pembelian') }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="modal-body px-sm-5 mx-50 pb-5">
@@ -221,29 +230,14 @@ Kelola Pembelian
         </div>
     </div>
 
-    <!-- Modal untuk Menampilkan PJB -->
-    <div class="modal fade" id="viewPjbModal" tabindex="-1" aria-labelledby="viewPjbModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewPjbModalLabel">PJB</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <iframe id="pjbIframe" src="" width="100%" height="600px" style="border: none;"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal Pembatalan  -->
     <div class="modal fade" id="pembatalanModal" tabindex="-1" aria-labelledby="pembatalanModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="formEditPembelian" method="POST" action="">
+                <form id="formEditPembelian" method="POST" action="{{route ('batal.pembelian') }}">
                     @csrf
                     @method('PUT')
                     <div class="modal-body px-sm-5 mx-50 pb-5">
@@ -269,6 +263,7 @@ Kelola Pembelian
 
                             </tbody>
                         </table>
+                        <input type="hidden" name="pembelian_id" id="cancel_id">
                         <div class="col-12 mb-3">
                             <label for="alasanPembatalan" class="form-label">Alasan Pembatalan</label>
                             <input type="text" class="form-control" id="alasanPembatalan" name="alasan_pembatalan" required>
@@ -288,9 +283,6 @@ Kelola Pembelian
             </div>
         </div>
     </div>
-
-
-
 
 </main>
 
@@ -410,7 +402,6 @@ Kelola Pembelian
         $('#editPembelianModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
 
-            // Ambil data dari button
             var id = button.data('id');
             var userId = button.data('user-id');
             var userName = button.data('user-name');
@@ -442,9 +433,8 @@ Kelola Pembelian
         });
 
         $('#pembatalanModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
+            var button = $(event.relatedTarget);
 
-            // Ambil data dari button
             var id = button.data('id');
             var userName = button.data('user-name');
             var projectName = button.data('project-name');
@@ -452,23 +442,12 @@ Kelola Pembelian
             var harga = button.data('harga');
 
             var modal = $(this);
-            modal.find('#cancel_id').val(id); // Set the ID in the hidden input
-            modal.find('#cancel_user_name').text(userName); // Set nama pengguna
-            modal.find('#cancel_project_name').text(projectName); // Set nama project
-            modal.find('#cancel_blok_number').text(blokNumber); // Set nama blok
-            modal.find('#cancel_harga').text("Rp " + harga); // Set harga
+            modal.find('#cancel_id').val(id);
+            modal.find('#cancel_user_name').text(userName);
+            modal.find('#cancel_project_name').text(projectName);
+            modal.find('#cancel_blok_number').text(blokNumber);
+            modal.find('#cancel_harga').text("Rp " + harga);
         });
-
-        $('body').on('click', '[data-bs-target="#viewPjbModal"]', function() {
-            var pjbUrl = $(this).data('pjb'); // Mengambil URL dari atribut data-pjb
-            $('#pjbIframe').attr('src', pjbUrl); // Mengatur src iframe
-        });
-
-        // Reset iframe src saat modal ditutup
-        $('#viewPjbModal').on('hidden.bs.modal', function() {
-            $('#pjbIframe').attr('src', '');
-        });
-
 
     });
 </script>
