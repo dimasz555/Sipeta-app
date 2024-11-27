@@ -1,19 +1,19 @@
 @extends('layouts.app')
 
 @section('title')
-Detail Pembayaran
+Detail Cicilan
 @endsection
 
 @section('content')
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Detail Pembelian</h1>
+        <h1>Detail Cicilan</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('profil') }}">Profil</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('profil') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('index.pembayaran.kavling') }}">Pembayaran Kavling</a></li>
-                <li class="breadcrumb-item active">Detail Pembayaran</li>
+                <li class="breadcrumb-item active">Detail Cicilan</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -72,6 +72,16 @@ Detail Pembayaran
                             @endif
                         </td>
                     </tr>
+                    @if ($pembayaran->status === 'batal')
+                    <tr>
+                        <td><strong>Alasan Pembatalan</strong></td>
+                        <td>: {{ $pembayaran->pembatalan->alasan_pembatalan }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jumlah Pengembalian</strong></td>
+                        <td>: {{ "Rp " . number_format($pembayaran->pembatalan->jumlah_pengembalian, 0, ',', '.') }}</td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
             <h5 class="card-title">Data Cicilan</h5>

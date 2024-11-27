@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Boking;
 use App\Models\Cicilan;
 use App\Models\Pembelian;
 use App\Models\Project;
@@ -46,6 +47,25 @@ class DashboardController extends Controller
                 $query->whereHas('pembelian');
             }])->get();
 
+            // Hitung total keseluruhan penjualan tanah (total harga dari semua pembelian)
+            $totalPenjualan = Pembelian::where('status', '!=', 'batal')
+                ->sum('harga');
+
+            // Hitung total pemasukan
+            $totalBoking = Boking::where('status', 'lunas')
+                ->sum('harga_boking');
+
+            $totalDP = Pembelian::where('status', '!=', 'batal')
+                ->sum('dp');
+
+            $totalCicilan = Cicilan::where('status', 'lunas')
+                ->sum('harga_cicilan');
+
+            $totalPemasukan = $totalBoking + $totalDP + $totalCicilan;
+
+            // Hitung total piutang (sisa yang belum dibayar)
+            $totalPiutang = $totalPenjualan - $totalPemasukan;
+
             // @dd($projects);
 
             return view('pages.admin.dashboard', [
@@ -54,6 +74,9 @@ class DashboardController extends Controller
                 'totalAdmin' => $totalAdmin,
                 'recentActivities' => $recentActivities,
                 'projects' => $projects,
+                'totalPenjualan' => $totalPenjualan,
+                'totalPemasukan' => $totalPemasukan,
+                'totalPiutang' => $totalPiutang,
             ]);
         } catch (\Exception $e) {
             // Log error (optional)

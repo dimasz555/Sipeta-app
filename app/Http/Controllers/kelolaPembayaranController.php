@@ -158,7 +158,7 @@ class KelolaPembayaranController extends Controller
             // Dekripsi ID
             $decryptedId = Crypt::decrypt($id);
 
-            $pembelian = Pembelian::with(['cicilans'])->findOrFail($decryptedId);
+            $pembelian = Pembelian::with(['cicilans','pembatalan'])->findOrFail($decryptedId);
             return view('pages.admin.detailPembelian', [
                 'pembelian' => $pembelian,
             ]);

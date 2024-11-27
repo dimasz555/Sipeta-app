@@ -83,6 +83,16 @@ Detail Pembelian
                             @endif
                         </td>
                     </tr>
+                    @if ($pembelian->status === 'batal')
+                    <tr>
+                        <td><strong>Alasan Pembatalan</strong></td>
+                        <td>: {{ $pembelian->pembatalan->alasan_pembatalan }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jumlah Pengembalian</strong></td>
+                        <td>: {{ "Rp " . number_format($pembelian->pembatalan->jumlah_pengembalian, 0, ',', '.') }}</td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
 
@@ -247,7 +257,7 @@ Detail Pembelian
 
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Upload</button>
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Kembali</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
                         </div>
                     </div>
                 </form>

@@ -35,7 +35,7 @@ class CicilanController extends Controller
         ]);
     }
 
-    public function detail($id)
+    public function detail($id, Request $request)
     {
         try {
             $user = Auth::user();
@@ -43,11 +43,27 @@ class CicilanController extends Controller
             // Dekripsi ID
             $decryptedId = Crypt::decrypt($id);
 
+            if ($request->query('payment_status') === 'success') {
+                session()->forget([
+                    'current_order_id',
+                    'snap_token',
+                    'cicilan_id',
+                    'payment_session_time',
+                    'pembelian_id'
+                ]);
+            }
+
+            // Tampilkan toast jika ada session 'error'
+            if ($request->session()->has('error')) {
+                Alert::toast($request->session()->get('error'), 'error')->autoClose(10000);
+            }
+
+            // dd(session()->all());
+
             // Cek payment status dari parameter URL dan pastikan belum ada session
             if (request()->has('payment_status') && !session()->has('payment_shown')) {
                 // Set session flash untuk menandai alert sudah ditampilkan
                 session()->flash('payment_shown', true);
-
                 switch (request()->payment_status) {
                     case 'success':
                         Alert::toast('Pembayaran Cicilan Berhasil', 'success')->autoClose(10000);
@@ -55,17 +71,19 @@ class CicilanController extends Controller
                     case 'error':
                         Alert::toast('Pembayaran Cicilan Gagal', 'error')->autoClose(10000);
                         break;
+                    case 'pending':
+                        Alert::toast('Pembayaran Cicilan Pending', 'info')->autoClose(10000);
+                        break;
                     case 'close':
                         Alert::toast('Pembayaran Dibatalkan', 'error')->autoClose(10000);
                         break;
                 }
-
                 // Redirect ke halaman yang sama tanpa parameter
                 return redirect()->route('pembayaran.kavling.detail', ['id' => $id]);
             }
 
             // Ambil data pembelian terhadap cicilan dan validasi pengguna
-            $pembayaran = Pembelian::with(['cicilans'])
+            $pembayaran = Pembelian::with(['cicilans', 'pembatalan'])
                 ->where('id', $decryptedId)
                 ->where('user_id', $user->id)
                 ->firstOrFail();
@@ -84,35 +102,36 @@ class CicilanController extends Controller
     {
         try {
             $user = Auth::user();
-
-            // Dekripsi ID yang diterima
             $decryptedId = Crypt::decrypt($id);
 
-            // Ambil cicilan berdasarkan ID dan validasi apakah milik pengguna yang sedang login
             $cicilan = Cicilan::with('pembelian')->where('id', $decryptedId)
                 ->whereHas('pembelian', function ($query) use ($user) {
-                    // Pastikan cicilan milik pengguna yang sedang login
                     $query->where('user_id', $user->id);
                 })
                 ->firstOrFail();
 
-            // Jika cicilan sudah dibayar, redirect kembali
             if ($cicilan->status === 'sudah dibayar') {
                 Alert::toast('Cicilan Sudah Dibayar', 'error')->autoClose(10000);
+                return redirect()->back();
             }
 
-            // Mengambil no_transaksi
-            $noTransaksi = $cicilan->no_transaksi;
+            // Cek apakah order_id sudah ada di session
+            if (!session()->has('current_order_id')) {
+                $noTransaksi = $cicilan->no_transaksi;
+                // Hapus 3 digit terakhir
+                $baseNoTransaksi = substr($noTransaksi, 0, -3);
+                // Menambahkan 3 digit baru dari timestamp
+                $newOrderId = $baseNoTransaksi . substr(time(), -3);
 
-            // Hapus 3 digit terakhir 
-            $baseNoTransaksi = substr($noTransaksi, 0, -3);
+                // Simpan order_id ke session
+                session(['current_order_id' => $newOrderId]);
 
-            // Menambahkan 3 digit baru dari 
-            $orderId = $baseNoTransaksi . substr(time(), -3);
+                // Update no_transaksi cicilan
+                $cicilan->update(['no_transaksi' => $newOrderId]);
+            }
 
-            // Update no_transaksi
-            $cicilan->no_transaksi = $orderId;
-            $cicilan->save();
+            // Gunakan order_id dari session
+            $orderId = session('current_order_id');
 
             // Set Midtrans Config
             \Midtrans\Config::$serverKey = config('midtrans.serverKey');
@@ -120,7 +139,6 @@ class CicilanController extends Controller
             \Midtrans\Config::$isSanitized = true;
             \Midtrans\Config::$is3ds = true;
 
-            // Buat parameter transaksi untuk Midtrans
             $params = [
                 'transaction_details' => [
                     'order_id' => $orderId,
@@ -132,19 +150,24 @@ class CicilanController extends Controller
                 ],
             ];
 
-            // Dapatkan Snap Token dari Midtrans
-            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            // Cek apakah snap token sudah ada di session
+            if (!session()->has('snap_token')) {
+                $snapToken = \Midtrans\Snap::getSnapToken($params);
+                session(['snap_token' => $snapToken]);
+            } else {
+                $snapToken = session('snap_token');
+            }
 
-            // Redirect ke halaman pembayaran dengan pass snapToken
+            session(['cicilan_id' => $cicilan->id]);
+            session(['pembelian_id' => Crypt::encrypt($cicilan->pembelian->id)]);
+
             return view('pages.konsumen.paymentPage', [
-                'snapToken' => $snapToken,  // Passing snapToken to the view
+                'snapToken' => $snapToken,
                 'cicilan' => $cicilan,
             ]);
         } catch (DecryptException $e) {
-            // Jika ID tidak dapat didekripsi atau tidak valid
             return response()->view('errors.404', [], 404);
         } catch (\Exception $e) {
-            // Log error untuk debugging dan tampilkan pesan error
             Log::error('Error: ' . $e->getMessage());
             return response()->view('errors.404', [], 404);
         }
@@ -162,7 +185,7 @@ class CicilanController extends Controller
 
                 if (!$cicilan) {
                     Log::error('Cicilan tidak ditemukan untuk order_id: ' . $request->order_id);
-                    return response()->json(['message' => 'Cicilan tidak ditemukan'], 404);
+                    return response()->json(['message' => 'Cicilan Tidak Ditemukan'], 404);
                 }
 
                 if ($request->transaction_status == 'settlement') {
@@ -177,8 +200,11 @@ class CicilanController extends Controller
                     });
 
                     if ($allPaid) {
-                        $pembelian->update(['status' => 'selesai']);
+                        $pembelian->update(['status' => 'selesai', 'tgl_lunas' => now()]);
                     }
+
+                    // Hapus session setelah pembayaran berhasil
+                    session()->forget(['current_order_id', 'snap_token', 'cicilan_id']);
 
                     return response()->json(['status' => 'success']);
                 } elseif (
@@ -187,6 +213,11 @@ class CicilanController extends Controller
                     $request->transaction_status == 'cancel'
                 ) {
                     $cicilan->update(['status' => 'belum dibayar']);
+
+
+                    // Hapus session jika pembayaran gagal
+                    session()->forget(['current_order_id', 'snap_token', 'cicilan_id']);
+
                     return response()->json(['status' => 'failed']);
                 }
             }

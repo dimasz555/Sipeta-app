@@ -11,7 +11,7 @@ Pembayaran Cicilan
         <h1>Pembayaran Cicilan</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('profil') }}">Profil</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('profil') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('index.pembayaran.kavling') }}">Pembayaran Kavling</a></li>
                 <li class="breadcrumb-item active">Pembayaran Cicilan</li>
             </ol>
@@ -22,6 +22,7 @@ Pembayaran Cicilan
         <div class="card-body">
             <h5 class="card-title">Detail Cicilan</h5>
             <p>Berikut adalah detail cicilan yang harus dibayar. Silakan lakukan pembayaran untuk cicilan ini:</p>
+
 
             <!-- Tampilkan detail cicilan -->
             <div class="row mb-2">
@@ -68,6 +69,11 @@ Pembayaran Cicilan
                     <span class="badge bg-danger">BATAL</span>
                     @endif
                 </div>
+            </div>
+            <!-- Pesan Peringatan Batas Waktu Pembayaran -->
+            <div class="alert alert-warning mb-4">
+                <strong>Peringatan!</strong> Batas waktu pembayaran dilakukan selama 5 menit.
+                Jika melewati waktu, silakan <a href="javascript:history.back()">kembali ke halaman sebelumnya</a> untuk melakukan pembayaran kembali.
             </div>
 
             @if($cicilan->status === 'belum dibayar')

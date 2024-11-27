@@ -11,7 +11,7 @@ Pembayaran Kavling
         <h1>Pembayaran Kavling</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('profil') }}">Profil</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('profil') }}">Home</a></li>
                 <li class="breadcrumb-item active">Pembayaran Kavling</li>
             </ol>
         </nav>

@@ -32,6 +32,7 @@ Pembayaran Kavling
                         <th>Tanggal Pembatalan</th>
                         <th>Nama</th>
                         <th>Project</th>
+                        <th>Blok</th>
                         <th>Harga Tanah</th>
                         <th>Status</th>
                         <th>Aksi</th>
@@ -45,6 +46,7 @@ Pembayaran Kavling
                         <td>{{ \Carbon\Carbon::parse($pb->tgl_pembatalan)->translatedFormat('j F Y') }}</td>
                         <td>{{ $pb->pembelian->user->name }}</td>
                         <td>{{ $pb->pembelian->boking->project->name ?? 'Tidak Diketahui' }}</td>
+                        <td>{{ $pb->pembelian->boking->no_blok ?? 'Tidak Diketahui' }}</td>
                         <td>{{ "Rp ". number_format($pb->pembelian->harga, 0, ',', '.') }}</td>
                         <td>
                             @if ($pb->pembelian->status === 'proses')

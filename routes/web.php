@@ -9,6 +9,7 @@ use App\Http\Controllers\KelolaPembatalanController;
 use App\Http\Controllers\kelolaPembayaranController;
 use App\Http\Controllers\KelolaPembayaranController as ControllersKelolaPembayaranController;
 use App\Http\Controllers\KelolaProjectController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Cicilan;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,9 @@ Route::middleware('auth', 'role:admin')->group(function () {
 
 
     Route::get('/admin/kelola-pembatalan', [KelolaPembatalanController::class, 'index'])->name('index.pembatalan');
+
+    Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('index.laporan');
+    Route::get('/laporan/export/{projectId}', [LaporanController::class, 'exportToExcel'])->name('laporan.export');
 });
 
 
@@ -82,7 +86,7 @@ Route::middleware(['auth', 'role:konsumen'])->group(function () {
 
     Route::get('/pembayaran-kavling', [CicilanController::class, 'index'])->name('index.pembayaran.kavling');
     Route::get('/pembayaran-kavling/{id}', [CicilanController::class, 'detail'])->name('pembayaran.kavling.detail');
-    Route::get('/pembayaran-kavling/bayar-cicilan/{id}', [CicilanController::class, 'bayarCicilan'])->name('bayar.cicilan');
+    Route::get('/pembayaran-kavling/bayar-cicilan/{id}', [CicilanController::class, 'bayarCicilan'])->name('bayar.cicilan')->middleware(['auth', 'check.payment']);;
 
 });
 

@@ -86,14 +86,12 @@ Dashboard
                     <!-- Reports -->
                     <div class="col-12">
                         <div class="card">
-
                             <div class="filter">
                                 <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <li class="dropdown-header text-start">
                                         <h6>Filter</h6>
                                     </li>
-
                                     <li><a class="dropdown-item" href="#">Today</a></li>
                                     <li><a class="dropdown-item" href="#">This Month</a></li>
                                     <li><a class="dropdown-item" href="#">This Year</a></li>
@@ -101,16 +99,61 @@ Dashboard
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Laporan</h5>
+                                <h5 class="card-title">Laporan Keuangan</h5>
+
+                                <!-- Laporan Cards -->
+                                <div class="row mb-4">
+                                    <!-- Total Penjualan Card -->
+                                    <div class="col-md-4">
+                                        <div class="card border-primary h-100">
+                                            <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-primary text-white" style="width: 45px; height: 45px; font-size: 1.5rem;">
+                                                        <i class="bi bi-cash-stack"></i>
+                                                    </div>
+                                                    <span class="text-muted ps-2" style="font-size: 1.1rem;">Total Penjualan</span>
+                                                </div>
+                                                <h6 class="fs-4 fw-bold mb-0">Rp {{ number_format($totalPenjualan, 0, ',', '.') }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Total Pemasukan Card -->
+                                    <div class="col-md-4">
+                                        <div class="card border-success h-100">
+                                            <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-success text-white" style="width: 45px; height: 45px; font-size: 1.5rem;">
+                                                        <i class="bi bi-wallet2"></i>
+                                                    </div>
+                                                    <span class="text-muted ps-2" style="font-size: 1.1rem;">Total Pemasukan</span>
+                                                </div>
+                                                <h6 class="fs-4 fw-bold mb-0">Rp {{ number_format($totalPemasukan, 0, ',', '.') }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Total Piutang Card -->
+                                    <div class="col-md-4">
+                                        <div class="card border-danger h-100">
+                                            <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                                                <div class="d-flex align-items-center mb-3">
+                                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-danger text-white" style="width: 45px; height: 45px; font-size: 1.5rem;">
+                                                        <i class="bi bi-receipt"></i>
+                                                    </div>
+                                                    <span class="text-muted ps-2" style="font-size: 1.1rem;">Total Piutang</span>
+                                                </div>
+                                                <h6 class="fs-4 fw-bold mb-0">Rp {{ number_format($totalPiutang, 0, ',', '.') }}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
-
-
                                 <!-- End Line Chart -->
 
                             </div>
-
                         </div>
                     </div><!-- End Reports -->
 
