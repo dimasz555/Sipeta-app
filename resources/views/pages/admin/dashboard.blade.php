@@ -171,6 +171,7 @@ Dashboard
                                 </div>
                             </div><!-- End activity item-->
                             @endforeach
+                            @endif
                         </div>
                     </div>
                 </div><!-- End Recent Activity -->
