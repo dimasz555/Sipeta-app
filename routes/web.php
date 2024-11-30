@@ -7,7 +7,6 @@ use App\Http\Controllers\KelolaBokingController;
 use App\Http\Controllers\KelolaKonsumenController;
 use App\Http\Controllers\KelolaPembatalanController;
 use App\Http\Controllers\kelolaPembayaranController;
-use App\Http\Controllers\KelolaPembayaranController as ControllersKelolaPembayaranController;
 use App\Http\Controllers\KelolaProjectController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;

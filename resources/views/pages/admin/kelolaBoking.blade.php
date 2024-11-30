@@ -179,7 +179,7 @@ Kelola Boking
 
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary">Tambah</button>
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Kembali</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
                         </div>
                     </form>
                 </div>
@@ -248,7 +248,7 @@ Kelola Boking
 
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary">Edit</button>
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
                         </div>
                     </form>
                 </div>
@@ -415,7 +415,7 @@ Kelola Boking
     $(document).ready(function() {
         $('#tableBoking').DataTable({
             responsive: true,
-            info: false,
+            info: true,
             "language": {
                 "paginate": {
                     "next": "Selanjutnya",
