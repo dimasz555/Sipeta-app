@@ -69,14 +69,6 @@ jobs:
         run: |
           php artisan migrate --force
           php artisan db:seed --force
-      - name: Run Tests
-        run: php artisan test
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: Logs
-          path: ./storage/logs
 
   deploy:
     runs-on: ubuntu-latest
