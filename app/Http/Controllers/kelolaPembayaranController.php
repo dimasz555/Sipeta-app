@@ -34,7 +34,7 @@ class KelolaPembayaranController extends Controller
                 ->orderBy('tgl_pembelian', 'desc')
                 ->get();
 
-            // Enkripsi ID untuk setiap pembelian
+            // Enkripsi ID 
             foreach ($pembelian as $pb) {
                 $pb->encrypted_id = Crypt::encrypt($pb->id);
             }
