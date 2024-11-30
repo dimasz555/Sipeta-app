@@ -72,8 +72,8 @@ Pembayaran Cicilan
             </div>
             <!-- Pesan Peringatan Batas Waktu Pembayaran -->
             <div class="alert alert-warning mb-4">
-                <strong>Peringatan!</strong> Batas waktu pembayaran dilakukan selama 5 menit.
-                Jika melewati waktu, silakan <a href="javascript:history.back()">kembali ke halaman sebelumnya</a> untuk melakukan pembayaran kembali.
+                <strong>Peringatan!</strong> Batas waktu pembayaran dilakukan selama 15 menit.
+                Jika melewati waktu, silakan refresh halaman ini atau <a href="javascript:history.back()">kembali ke halaman sebelumnya</a> untuk melakukan pembayaran kembali.
             </div>
 
             @if($cicilan->status === 'belum dibayar')
