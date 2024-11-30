@@ -62,7 +62,6 @@ class KelolaBokingcontroller extends Controller
 
             DB::beginTransaction();
 
-            // Menambahkan booking baru dengan status 'proses' sebagai default
             $boking = Boking::create([
                 'user_id' => $request->user_id,
                 'project_id' => $request->project_id,
@@ -71,7 +70,7 @@ class KelolaBokingcontroller extends Controller
                 'tgl_boking' => $request->tgl_boking,
                 'tgl_lunas' => null,
                 'harga_boking' => $request->harga_boking,
-                'status' => 'proses',  // default
+                'status' => 'proses',
             ]);
 
             DB::commit();
@@ -98,14 +97,12 @@ class KelolaBokingcontroller extends Controller
                 'no_blok' => 'required|string',
                 'tgl_boking' => 'required|date',
                 'harga_boking' => 'required|integer',
-                // Tidak ada validasi untuk status di sini
             ]);
 
             // Temukan user berdasarkan ID
             $boking = Boking::where('id', $request->id)->firstOrFail();
 
             // dd($boking);
-            // Memperbarui data booking, status tetap tidak berubah
             $boking->update([
                 'user_id' => $request->user_id,
                 'project_id' => $request->project_id,
@@ -113,7 +110,6 @@ class KelolaBokingcontroller extends Controller
                 'no_blok' => $request->no_blok,
                 'tgl_boking' => $request->tgl_boking,
                 'harga_boking' => $request->harga_boking,
-                // Tidak memperbarui status
             ]);
 
             Alert::toast('Data Boking Berhasil Diperbaharui', 'success')->autoClose(10000);
@@ -135,7 +131,6 @@ class KelolaBokingcontroller extends Controller
             // Temukan booking berdasarkan ID
             $boking = Boking::where('id', $request->id)->firstOrFail();
 
-            // Mengubah status booking menjadi 'lunas'
             $boking->update([
                 'status' => 'lunas', // Mengubah status menjadi lunas
                 'tgl_lunas' => now()->timezone('Asia/Jakarta'),
@@ -179,7 +174,6 @@ class KelolaBokingcontroller extends Controller
 
             return redirect()->back();
         } catch (\Exception $e) {
-            // Menampilkan pesan kesalahan jika terjadi pengecualian
             Alert::toast('Terjadi kesalahan: ' . $e->getMessage(), 'error')->autoClose(10000);
 
             return redirect()->back();

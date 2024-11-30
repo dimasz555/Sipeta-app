@@ -11,7 +11,7 @@ Riwayat Boking
         <h1>Riwayat Boking</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('profil') }}">Profil</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('profil') }}">Home</a></li>
                 <li class="breadcrumb-item active">Riwayat Boking</li>
             </ol>
         </nav>
@@ -19,7 +19,7 @@ Riwayat Boking
 
     <div class="container">
         @if($boking->isEmpty())
-        <p>Tidak ada data.</p>
+        <p>Tidak Ada Data Boking.</p>
         @else
         <div class="row">
             @foreach($boking as $boking)

@@ -21,7 +21,10 @@ Kelola Project
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Data Project</h5>
-            <x-primary-button class="w-full flex justify-center items-center" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#addProject" style="width: 200px;">Tambah Project</x-primary-button>
+            <x-primary-button class="w-full flex justify-center items-center gap-2" style="width: 200px;" title="Tambah Project" data-bs-toggle="modal" data-bs-target="#addProject">
+                <i class="bi bi-plus-lg"></i>
+                Tambah Project
+            </x-primary-button>
         </div>
 
         <div class="table-responsive">
@@ -29,8 +32,8 @@ Kelola Project
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Lokasi</th>
+                        <th>Nama Project</th>
+                        <th>Lokasi Project</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -63,7 +66,10 @@ Kelola Project
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Data Blok</h5>
-            <x-primary-button class="w-full flex justify-center items-center" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#addBlok" style="width: 200px;">Tambah Blok</x-primary-button>
+            <x-primary-button class="w-full flex justify-center items-center gap-2" style="width: 200px;" title="Tambah Blok" data-bs-toggle="modal" data-bs-target="#addBlok">
+                <i class="bi bi-plus-lg"></i>
+                Tambah Blok
+            </x-primary-button>
         </div>
 
         <div class="table-responsive">
@@ -130,7 +136,7 @@ Kelola Project
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary me-1 mt-1">Tambah</button>
                             <button type="reset" class="btn btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">
-                                kembali
+                                Batal
                             </button>
                         </div>
                     </form>
@@ -145,10 +151,10 @@ Kelola Project
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-transparent">
-                    <h3 class="text-center" id="addNewCardTitle">Edit Project</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-sm-5 mx-50 pb-5">
+                    <h3 class="text-center" id="addNewCardTitle">Edit Project</h3>
                     <!-- form -->
                     <form class="form row gy-1 gx-2 mt-75" method="POST" action="{{ route('edit.project') }}">
                         @method('put')
@@ -171,7 +177,7 @@ Kelola Project
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary me-1 mt-1">Edit</button>
                             <button type="reset" class="btn btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">
-                                kembali
+                                Batal
                             </button>
                         </div>
                     </form>
@@ -189,7 +195,7 @@ Kelola Project
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-sm-5 mx-50 pb-5">
-                    <h3 class="text-center mb-1" id="addNewCardTitle">Hapus Konsumen</h3>
+                    <h3 class="text-center mb-1" id="addNewCardTitle">Hapus Project</h3>
                     <p class="text-center">Kamu yakin ingin menghapus data ini?</p>
                     <!-- form -->
                     <form class="form row gy-1 gx-2 mt-75" method="POST" action="{{ route('hapus.project') }}">
@@ -259,10 +265,10 @@ Kelola Project
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-transparent">
-                    <h3 class="text-center" id="addNewCardTitle">Edit Blok</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-sm-5 mx-50 pb-5">
+                    <h3 class="text-center mb-1" id="addNewCardTitle">Edit Blok</h3>
                     <!-- form -->
                     <form class="form row gy-1 gx-2 mt-75" method="POST" action="{{ route('edit.blok') }}">
                         @method('put')

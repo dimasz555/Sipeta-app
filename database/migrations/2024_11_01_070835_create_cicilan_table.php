@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('tahun');
             $table->datetime('tgl_bayar')->nullable();
             $table->string('kwitansi')->nullable();
-            $table->enum('status', ['belum dibayar', 'lunas']);
+            $table->enum('status', ['belum dibayar', 'lunas', 'batal']);
             $table->timestamps();
         });
     }

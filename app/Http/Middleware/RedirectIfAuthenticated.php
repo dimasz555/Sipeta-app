@@ -25,7 +25,7 @@ class RedirectIfAuthenticated
                 if ($user->hasRole('admin')) {
                     return redirect('/admin/dashboard'); // Redirect ke dashboard admin
                 } elseif ($user->hasRole('konsumen')) {
-                    return redirect('/profile'); // Redirect ke profil konsumen
+                    return redirect('/profil'); // Redirect ke profil konsumen
                 }
             }
         }
