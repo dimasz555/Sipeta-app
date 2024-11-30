@@ -24,8 +24,8 @@ class AddUserDummy extends Seeder
         for ($i = 1; $i <= 200; $i++) {
             $user = User::create([
                 'name' => 'Konsumen ' . $i,
-                'username' => 'konsumen' . $i, // Username unik
-                'phone' => '081234' . str_pad($i, 6, '0', STR_PAD_LEFT), // Nomor telepon unik
+                'username' => 'konsumen' . $i,
+                'phone' => '081234' . str_pad($i, 6, '0', STR_PAD_LEFT),
                 'password' => Hash::make('sipeta123'), 
             ]);
 

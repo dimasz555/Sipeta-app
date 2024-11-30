@@ -157,6 +157,9 @@ Dashboard
                     <div class="card-body">
                         <h5 class="card-title">Aktivitas Terbaru</h5>
                         <div class="activity">
+                            @if ($recentActivities->isEmpty())
+                            <p class="text-muted">Belum ada aktivitas</p>
+                            @else
                             @foreach ($recentActivities as $activity)
                             <div class="activity-item d-flex">
                                 <i class="bi bi-circle-fill activity-badge text-success align-self-start"></i>
