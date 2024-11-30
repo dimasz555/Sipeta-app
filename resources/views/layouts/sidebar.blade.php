@@ -59,6 +59,14 @@
          </li>
        </ul>
      </li>
+
+     <li class="nav-item">
+       <a class="nav-link {{ request()->routeIs('index.laporan') ? 'active' : '' }}" href="{{ route('index.laporan') }}">
+         <i class="bi bi-clipboard-data"></i>
+         <span>Laporan</span>
+       </a>
+     </li>
+
      @elseif(auth()->user()->hasRole('konsumen'))
      <li class="nav-item">
        <a class="nav-link {{ request()->routeIs('profil') ? 'active' : '' }}" href="{{ route('profil') }}">
@@ -69,7 +77,7 @@
      <li class="nav-item">
        <a class="nav-link {{ request()->routeIs('index.riwayat.boking') ? 'active' : '' }}" href="{{ route('index.riwayat.boking') }}">
          <i class="bi bi-calendar-check"></i>
-         <span>Riwayat Boking</span>
+         <span>Boking</span>
        </a>
      </li>
      <li class="nav-item">

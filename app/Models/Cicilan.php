@@ -22,6 +22,10 @@ class Cicilan extends Model
         'status',
     ];
 
+    protected $casts = [
+        'tgl_bayar' => 'datetime',
+    ];    
+
     public function pembelian()
     {
         return $this->belongsTo(Pembelian::class);

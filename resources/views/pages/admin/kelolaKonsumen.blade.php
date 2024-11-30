@@ -21,7 +21,10 @@ Kelola Konsumen
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Data Konsumen</h5>
-            <x-primary-button class="w-full flex justify-center items-center" style="width: 200px;" data-bs-toggle="modal" data-bs-target="#addKonsumen" style="width: 200px;">Tambah Konsumen</x-primary-button>
+            <x-primary-button class="w-full flex justify-center items-center gap-2" style="width: 200px;" title="Tambah Blok" data-bs-toggle="modal" data-bs-target="#addKonsumen">
+                <i class="bi bi-plus-lg"></i>
+                Tambah Konsumen
+            </x-primary-button>
         </div>
 
         <div class="table-responsive">
@@ -32,6 +35,7 @@ Kelola Konsumen
                         <th>Nama</th>
                         <th>Username</th>
                         <th>Nomor Hp</th>
+                        <th>Jenis Kelamin</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -43,33 +47,43 @@ Kelola Konsumen
                         <td>{{ $ks->username }}</td>
                         <td>{{ $ks->phone }}</td>
                         <td>
-                            <x-button-action style="background-color: #BC55C3;" data-bs-toggle="modal" data-bs-target="#viewModal"
-                                data-id="{{ $ks->id }}" data-name="{{ $ks->name }}" data-username="{{ $ks->username }}"
-                                data-gender="{{ $ks->gender }}" data-phone="{{ $ks->phone }}"
-                                title="Lihat Detail Konsumen">
-                                <i class="bi bi-eye text-white"></i>
-                            </x-button-action>
+                            @if($ks->gender == 'wanita')
+                            Perempuan
+                            @elseif($ks->gender == 'pria')
+                            Laki-Laki
+                            @else
+                            Tidak Diketahui
+                            @endif
+                        </td>
+                        <td>
+
                             <x-button-action style="background-color: #BC55C3;" data-bs-toggle="modal" data-bs-target="#editModal"
-                                data-id="{{ $ks->id }}" data-name="{{ $ks->name }}" data-username="{{ $ks->username }}"
-                                data-gender="{{ $ks->gender }}" data-phone="{{ $ks->phone }}"
+                                data-id="{{ $ks->id }}"
+                                data-name="{{ $ks->name }}"
+                                data-username="{{ $ks->username }}"
+                                data-gender="{{ $ks->gender }}"
+                                data-phone="{{ $ks->phone }}"
                                 title="Edit Data Konsumen">
                                 <i class="bi bi-pencil text-white"></i>
                             </x-button-action>
-                            <x-button-action style="background-color: #E33437;" data-bs-toggle="modal" data-bs-target="#hapusModal" data-id="{{ $ks->id }}" data-name="{{ $ks->name }}" data-username="{{ $ks->username }}"
+                            <x-button-action style="background-color: #E33437;" data-bs-toggle="modal" data-bs-target="#hapusModal"
+                                data-id="{{ $ks->id }}"
+                                data-name="{{ $ks->name }}"
+                                data-username="{{ $ks->username }}"
                                 title="Hapus Data Konsumen">
                                 <i class="bi bi-trash text-white"></i>
                             </x-button-action>
                             <x-button-action style="background-color: #BC55C3;" data-bs-toggle="modal"
-                                data-bs-target="#resetModal" data-id="{{ $ks->id }}" data-name="{{ $ks->name }}"
-                                data-username="{{ $ks->username }}" title="Reset Password">
+                                data-bs-target="#resetModal"
+                                data-id="{{ $ks->id }}"
+                                data-name="{{ $ks->name }}"
+                                data-username="{{ $ks->username }}"
+                                title="Reset Password">
                                 <i class="bi bi-key text-white"></i>
                             </x-button-action>
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="5" class="text-center">Data konsumen tidak ada.</td>
-                    </tr>
                     @endforelse
                 </tbody>
             </table>
@@ -115,7 +129,7 @@ Kelola Konsumen
                         <div class="col-12">
                             <label class="form-label" for="gender">Jenis Kelamin</label>
                             <select class="form-select" id="gender" name="gender" required>
-                                <option value="" disabled selected>Select</option>
+                                <option value="" disabled selected>Pilih</option>
                                 <option value="pria">Laki-laki</option>
                                 <option value="wanita">Perempuan</option>
                             </select>
@@ -134,98 +148,46 @@ Kelola Konsumen
     </div>
     <!--end card modal -->
 
-    <!-- card viewKonsumen modal -->
-    <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-transparent">
-                    <h3 class="text-center" id="addNewCardTitle">Profil Konsumen</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body px-sm-5 mx-50 pb-5">
-                    <!-- form -->
-                    <form class="form row gy-1 gx-2 mt-75">
-                        <div class="input-group input-group-merge">
-                            <input id="id" name="id" class="form-control" type="text" hidden />
-                            <div class="col-12">
-                                <label class="form-label" for="name">Nama</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="name" name="name" class="form-control" type="text" disabled />
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label" for="username">Username</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="username" name="username" class="form-control" type="text" disabled />
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label" for="phone">Nomor Hp</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control" type="number" name="phone" id="phone" disabled />
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label" for="gender">Jenis Kelamin</label>
-                                <div class="input-group input-group-merge">
-                                    <input id="gender" name="gender" class="form-control" type="text" disabled />
-                                </div>
-                            </div>
-
-                            <div class="col-12 text-center">
-                                <button type="reset" class="btn btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">
-                                    Cancel
-                                </button>
-                            </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--end card modal -->
 
     <!-- card editKonsumen modal -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-transparent">
-                    <h3 class="text-center" id="addNewCardTitle">Edit Profil Konsumen</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-sm-5 mx-50 pb-5">
+                    <h3 class="text-center" id="addNewCardTitle">Edit Profil Konsumen</h3>
                     <!-- form -->
                     <form class="form row gy-1 gx-2 mt-75" method="POST" action="{{ route('edit.konsumen') }}">
                         @method('put')
                         @csrf
-                        <input id="id" name="id" class="form-control" type="text" hidden />
+                        <input id="edit_id" name="id" class="form-control" type="text" hidden />
 
                         <div class="col-12">
                             <label class="form-label" for="name">Nama</label>
                             <div class="input-group input-group-merge">
-                                <input id="name" name="name" class="form-control" type="text" />
+                                <input id="edit_name" name="name" class="form-control" type="text" />
                             </div>
                         </div>
 
                         <div class="col-12">
                             <label class="form-label" for="username">Username</label>
                             <div class="input-group input-group-merge">
-                                <input id="username" name="username" class="form-control" type="text" />
+                                <input id="edit_username" name="username" class="form-control" type="text" />
                             </div>
                         </div>
 
                         <div class="col-12">
                             <label class="form-label" for="phone">Nomor Hp</label>
                             <div class="input-group input-group-merge">
-                                <input class="form-control" type="number" name="phone" id="phone" />
+                                <input class="form-control" type="number" name="phone" id="editphone" />
                             </div>
                         </div>
 
                         <div class="col-12">
                             <label class="form-label" for="gender">Jenis Kelamin</label>
-                            <select class="form-select" id="gender" name="gender" required>
+                            <select class="form-select" id="editgender" name="gender" required>
                                 <option value="pria" {{ Auth::user()->gender === 'pria' ? 'selected' : '' }}>Laki-laki</option>
                                 <option value="wanita" {{ Auth::user()->gender === 'wanita' ? 'selected' : '' }}>Perempuan</option>
                             </select>
@@ -258,18 +220,18 @@ Kelola Konsumen
                     <form class="form row gy-1 gx-2 mt-75" method="POST" action="{{ route('hapus.konsumen') }}">
                         @method('delete')
                         @csrf
-                        <input type="text" name="id" id="id" hidden>
+                        <input type="text" name="id" id="delete_id" hidden>
                         <div class="col-12">
                             <label class="form-label" for="name">Nama</label>
                             <div class="input-group input-group-merge">
-                                <input id="name" name="name" class="form-control" type="text" disabled />
+                                <input id="delete_name" name="name" class="form-control" type="text" disabled />
                             </div>
                         </div>
 
                         <div class="col-12">
                             <label class="form-label" for="username">Username</label>
                             <div class="input-group input-group-merge">
-                                <input id="username" name="username" class="form-control" type="text" disabled />
+                                <input id="delete_username" name="username" class="form-control" type="text" disabled />
                             </div>
                         </div>
                         <div class="col-12 text-center">
@@ -329,68 +291,65 @@ Kelola Konsumen
 
 </main><!-- End #main -->
 
-<!-- datatable js -->
+<!-- jQuery -->
 <script src="{{ asset('plugin/jQuery-3.7.0/jquery-3.7.0.js') }}"></script>
+
+<!-- DataTables JS -->
 <script src="{{ asset('plugin/DataTables-1.13.8/js/jquery.dataTables.min.js') }}"></script>
 
+<!-- Other JS -->
 <script src="{{ asset('plugin/pdfmake-0.2.7/pdfmake.min.js') }}"></script>
 <script src="{{ asset('plugin/pdfmake-0.2.7/vfs_fonts.js') }}"></script>
-
 <script src="{{ asset('plugin/JSZip-3.10.1/jszip.min.js') }}"></script>
-
-
 <script src="{{ asset('plugin/Buttons-2.4.2/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('plugin/Buttons-2.4.2/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('plugin/Buttons-2.4.2/js/buttons.print.min.js') }}"></script>
 
 <script>
-    $('#tableKonsumen').DataTable({
-        lengthMenu: [
-            [10, 25, 50, -1],
-            [10, 25, 50, "All"]
-        ],
-        responsive: true,
-        info: true,
-        language: {
-            paginate: {
-                next: "Selanjutnya",
-                previous: "Sebelumnya"
-            },
-            search: "Pencarian :",
-            emptyTable: "Tidak ada data",
-            zeroRecords: "Tidak ada data",
-            lengthMenu: "Menampilkan _MENU_ data per halaman",
-        }
-    });
-</script>
-
-<script>
     $(document).ready(function() {
-        $('#viewModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Tombol yang mengklik modal
-            var id = button.data('id');
-            var name = button.data('name');
-            var username = button.data('username');
-            var phone = button.data('phone');
-            var gender = button.data('gender');
-
-            // Cek nilai gender dan ubah ke label yang sesuai
-            var genderLabel = (gender === 'pria') ? 'Laki-laki' : (gender === 'wanita' ? 'Perempuan' : '');
-
-            var modal = $(this);
-            modal.find('.modal-body #id').val(id);
-            modal.find('.modal-body #name').val(name);
-            modal.find('.modal-body #username').val(username);
-            modal.find('.modal-body #phone').val(phone);
-            modal.find('.modal-body #gender').val(genderLabel); // Set genderLabel
+        $('#tableKonsumen').DataTable({
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            info: true,
+            language: {
+                paginate: {
+                    next: "Selanjutnya",
+                    previous: "Sebelumnya"
+                },
+                search: "Pencarian :",
+                emptyTable: "Tidak ada data",
+                zeroRecords: "Tidak ada data",
+                lengthMenu: "Menampilkan _MENU_ data per halaman",
+            }
         });
-    });
-</script>
 
-<script>
-    $(document).ready(function() {
+
+        // $('#viewModal').on('show.bs.modal', function(event) {
+        //     var button = $(event.relatedTarget);
+
+        //     var id = button.data('id');
+        //     var name = button.data('name');
+        //     var username = button.data('username');
+        //     var phone = button.data('phone');
+        //     var gender = button.data('gender');
+
+        //     // Cek nilai gender dan ubah ke label yang sesuai
+        //     var genderLabel = (gender === 'pria') ? 'Laki-laki' : (gender === 'wanita' ? 'Perempuan' : '');
+
+        //     var modal = $(this);
+        //     modal.find('.modal-body #id').val(id);
+        //     modal.find('.modal-body #name').val(name);
+        //     modal.find('.modal-body #username').val(username);
+        //     modal.find('.modal-body #phone').val(phone);
+        //     modal.find('.modal-body #gender').val(genderLabel);
+        // });
+
         $('#editModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
+
             var id = button.data('id');
             var name = button.data('name');
             var username = button.data('username');
@@ -398,17 +357,14 @@ Kelola Konsumen
             var gender = button.data('gender');
 
             var modal = $(this);
-            modal.find('.modal-body #id').val(id);
-            modal.find('.modal-body #name').val(name);
-            modal.find('.modal-body #username').val(username);
-            modal.find('.modal-body #phone').val(phone);
-            modal.find('.modal-body #gender').val(gender);
+            modal.find('#edit_id').val(id);
+            modal.find('#edit_name').val(name);
+            modal.find('#edit_username').val(username);
+            modal.find('#editphone').val(phone);
+            modal.find('#editgender').val(gender);
         });
-    });
-</script>
 
-<script>
-    $(document).ready(function() {
+
         $('#hapusModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
             var id = button.data('id')
@@ -416,18 +372,15 @@ Kelola Konsumen
             var username = button.data('username')
 
             var modal = $(this)
-            modal.find('.modal-body #id').val(id)
-            modal.find('.modal-body #name').val(name)
-            modal.find('.modal-body #username').val(username)
+            modal.find('#delete_id').val(id)
+            modal.find('#delete_name').val(name)
+            modal.find('#delete_username').val(username)
 
         })
-    });
-</script>
 
-<script>
-    $(document).ready(function() {
         $('#resetModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
+
             var id = button.data('id')
             var name = button.data('name')
             var username = button.data('username')
@@ -438,16 +391,40 @@ Kelola Konsumen
             modal.find('.modal-body #username').val(username)
 
         })
-    });
-</script>
 
-<script>
-    $(document).ready(function() {
-        // Inisialisasi tooltip
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
+        $('#addKonsumen').on('show.bs.modal', function() {
+            console.log('addKonsumen modal triggered');
         });
+
+        $('#viewModal').on('show.bs.modal', function() {
+            console.log('viewModal modal triggered');
+        });
+
+        $('#editModal').on('show.bs.modal', function() {
+            console.log('editModal modal triggered');
+        });
+
+        $('#hapusModal').on('show.bs.modal', function() {
+            console.log('hapusModal modal triggered');
+        });
+
+        $('#resetModal').on('show.bs.modal', function() {
+            console.log('resetModal modal triggered');
+        });
+
+        document.querySelectorAll('[data-bs-toggle="modal"]').forEach(button => {
+            button.addEventListener('click', () => {
+                const target = button.getAttribute('data-bs-target');
+                console.log(`Modal triggered: ${target}`);
+                const modal = document.querySelector(target);
+                if (modal) {
+                    console.log('Modal found:', modal);
+                } else {
+                    console.error('Modal not found:', target);
+                }
+            });
+        });
+
     });
 </script>
 

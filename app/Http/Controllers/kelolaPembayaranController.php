@@ -8,6 +8,7 @@ use App\Models\Pembelian;
 use App\Models\Project;
 use App\Models\Blok;
 use App\Models\Cicilan;
+use App\Models\Pembatalan;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Storage;
 
-class kelolaPembayaranController extends Controller
+class KelolaPembayaranController extends Controller
 {
     public function index()
     {
@@ -27,8 +28,12 @@ class kelolaPembayaranController extends Controller
                 ->with('user')
                 ->orderBy('tgl_boking', 'desc')
                 ->get();
-            $pembelian = Pembelian::all();
-            $pembelian = Pembelian::orderBy('tgl_pembelian', 'desc')->get();
+
+            // Ambil data pembelian dengan status 'lunas' dan 'proses'
+            $pembelian = Pembelian::whereIn('status', ['selesai', 'proses'])
+                ->orderBy('tgl_pembelian', 'desc')
+                ->get();
+
             // Enkripsi ID untuk setiap pembelian
             foreach ($pembelian as $pb) {
                 $pb->encrypted_id = Crypt::encrypt($pb->id);
@@ -153,7 +158,7 @@ class kelolaPembayaranController extends Controller
             // Dekripsi ID
             $decryptedId = Crypt::decrypt($id);
 
-            $pembelian = Pembelian::with(['cicilans'])->findOrFail($decryptedId);
+            $pembelian = Pembelian::with(['cicilans','pembatalan'])->findOrFail($decryptedId);
             return view('pages.admin.detailPembelian', [
                 'pembelian' => $pembelian,
             ]);
@@ -245,6 +250,92 @@ class kelolaPembayaranController extends Controller
             }
 
             Alert::toast('Data Pembelian Berhasil Diperbaharui', 'success')->autoClose(10000);
+            return redirect()->back();
+        } catch (\Exception $e) {
+            Alert::toast('Terjadi kesalahan: ' . $e->getMessage(), 'error')->autoClose(10000);
+            return redirect()->back();
+        }
+    }
+
+    public function batalPembelian(Request $request)
+    {
+        try {
+            $request->validate([
+                'pembelian_id' => 'required|exists:pembelian,id',
+                'alasan_pembatalan' => 'required|string',
+                'jumlah_pengembalian' => 'required|integer|min:1',
+            ]);
+
+            // Ambil data pembelian berdasarkan ID yang dikirimkan
+            $pembelian = Pembelian::findOrFail($request->pembelian_id);
+
+            // Periksa apakah status pembelian sudah dibatalkan
+            if ($pembelian->status === 'batal') {
+                Alert::toast('Pembelian sudah dibatalkan sebelumnya.', 'warning')->autoClose(10000);
+                return redirect()->back();
+            }
+
+            // Update status pembelian menjadi 'batal'
+            $pembelian->status = 'batal';
+            $pembelian->save();
+
+            // Pembatalan untuk cicilan
+            $cicilan = Cicilan::where('pembelian_id', $pembelian->id)
+                ->where('status', 'belum dibayar') // Hanya cicilan yang belum dibayar yang diubah
+                ->get();
+
+            foreach ($cicilan as $c) {
+                // Update status cicilan menjadi 'batal'
+                $c->status = 'batal';
+                $c->save();
+            }
+
+            // Insert data pembatalan ke tabel pembatalan
+            Pembatalan::create([
+                'pembelian_id' => $pembelian->id,
+                'alasan_pembatalan' => $request->alasan_pembatalan,
+                'tgl_pembatalan' => Carbon::now()->timezone('Asia/Jakarta'),
+                'jumlah_pengembalian' => $request->jumlah_pengembalian,
+            ]);
+
+            Alert::toast('Pembelian Berhasil Dibatalkan', 'success')->autoClose(10000);
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            Alert::toast('Terjadi kesalahan: ' . $e->getMessage(), 'error')->autoClose(10000);
+            return redirect()->back();
+        }
+    }
+
+    public function uploadKwitansi(Request $request)
+    {
+        try {
+            // Validasi file yang di-upload
+            $request->validate([
+                'kwitansi' => 'required|file|mimes:pdf,jpg,png|max:2048'
+            ]);
+
+            // Cari cicilan berdasarkan ID
+            $cicilan = Cicilan::findOrFail($request->id);
+
+            // Jika sudah ada file kwitansi sebelumnya, hapus file lama
+            if ($cicilan->kwitansi) {
+                Storage::delete('public/kwitansi/' . $cicilan->kwitansi);
+            }
+
+            // Ambil file yang di-upload
+            $file = $request->file('kwitansi');
+
+            // Buat nama file 
+            $fileName = 'kwitansi_' . $cicilan->no_transaksi . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            // Simpan file di folder public/kwitansi
+            $path = $file->storeAs('kwitansi', $fileName, 'public');
+
+            // Update nama file kwitansi di database
+            $cicilan->kwitansi = $fileName;
+            $cicilan->save();
+
+            Alert::toast('Kwitansi Berhasil Diupload', 'success')->autoClose(10000);
             return redirect()->back();
         } catch (\Exception $e) {
             Alert::toast('Terjadi kesalahan: ' . $e->getMessage(), 'error')->autoClose(10000);
