@@ -28,6 +28,7 @@ Laporan
                         <th>No</th>
                         <th>Nama Project</th>
                         <th>Lokasi</th>
+                        <th>Jumlah Konsumen</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -37,10 +38,12 @@ Laporan
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $pj->name }}</td>
                         <td>{{ $pj->lokasi }}</td>
+                        <td>{{ $pj->jumlah_konsumen }} Konsumen</td>
                         <td>
                             <!-- Button Export -->
                             <a href="{{ route('laporan.export', $pj->id) }}">
-                                <x-primary-button>
+                                <x-primary-button class="gap-2">
+                                    <i class="bi bi-download"></i>
                                     Cetak Laporan
                                 </x-primary-button>
                             </a>

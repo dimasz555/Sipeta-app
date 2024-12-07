@@ -295,8 +295,8 @@ Kelola Boking
                     <form id="confirmLunasForm" method="POST" action="{{ route('confirm.boking') }}">
                         @csrf
                         <input type="hidden" name="id" id="confirm_boking_id">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Konfirmasi</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     </form>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Pembayaran Kavling
+Pembatalan
 @endsection
 
 @section('content')
@@ -62,7 +62,9 @@ Pembayaran Kavling
                         <td>
                             <x-button-action style="background-color: #BC55C3;"
                                 title="Detail Pembatalan">
-                                <a href="{{ route('pembelian.detail', $pb->encrypted_id) }}" class="text-white"><i class="bi bi-eye"></i></a>
+                                <a href="{{ route('pembatalan.detail', $pb->encrypted_id) }}" class="text-white">
+                                    <i class="bi bi-eye"></i>
+                                </a>
                             </x-button-action>
                         </td>
                     </tr>

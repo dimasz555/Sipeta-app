@@ -65,10 +65,9 @@ Kelola Pembelian
                             @endif
                         </td>
                         <td>
-                            <x-button-action style="background-color: #BC55C3;" title="Detail Pembelian">
-                                <a href="{{ route('pembelian.detail', urlencode($bk->encrypted_id)) }}" class="text-white">
-                                    <i class="bi bi-eye"></i>
-                                </a>
+                            <x-button-action style="background-color: #BC55C3;"
+                                title="Detail Pembelian">
+                                <a href="{{ route('pembelian.detail', $bk->encrypted_id) }}" class="text-white"><i class="bi bi-eye"></i></a>
                             </x-button-action>
                             @if ($bk->pjb)
                             <x-button-action style="background-color: #BC55C3;" title="Lihat PJB" class="text-white">

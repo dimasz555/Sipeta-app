@@ -86,6 +86,23 @@ class KelolaPembayaranController extends Controller
                 'pjb' => 'nullable|file|mimes:pdf|max:6048',
             ]);
 
+            // Cek apakah boking_id sudah ada di tabel pembelian
+            $existingPembelian = Pembelian::where('boking_id', $request->boking_id)->first();
+            if ($existingPembelian) {
+                Alert::toast('Data Boking Ini Sudah Digunakan', 'error')->autoClose(10000);
+                return redirect()->back();
+            }
+
+            // Ambil data boking 
+            $boking = Boking::find($request->boking_id);
+
+            // Cek jika user_id  sesuai dengan user_id pada boking
+            if ($boking->user_id != $request->user_id) {
+                Alert::toast('Data Konsumen Tidak Sesuai Dengan Data Boking. Silahkan Cek Kembali', 'error')->autoClose(10000);
+                return redirect()->back();
+            }
+
+
             // Inisialisasi variabel
             $filePath = null;
 
@@ -158,7 +175,7 @@ class KelolaPembayaranController extends Controller
             // Dekripsi ID
             $decryptedId = Crypt::decrypt($id);
 
-            $pembelian = Pembelian::with(['cicilans','pembatalan'])->findOrFail($decryptedId);
+            $pembelian = Pembelian::with(['cicilans', 'pembatalan'])->findOrFail($decryptedId);
             return view('pages.admin.detailPembelian', [
                 'pembelian' => $pembelian,
             ]);
