@@ -69,6 +69,7 @@ Route::middleware('auth', 'role:admin')->group(function () {
 
 
     Route::get('/admin/kelola-pembatalan', [KelolaPembatalanController::class, 'index'])->name('index.pembatalan');
+    Route::get('/pembatalan/detail/{id}', [KelolaPembatalanController::class, 'detail'])->name('pembatalan.detail');
 
     Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('index.laporan');
     Route::get('/laporan/export/{projectId}', [LaporanController::class, 'exportToExcel'])->name('laporan.export');
@@ -86,7 +87,6 @@ Route::middleware(['auth', 'role:konsumen'])->group(function () {
     Route::get('/pembayaran-kavling', [CicilanController::class, 'index'])->name('index.pembayaran.kavling');
     Route::get('/pembayaran-kavling/{id}', [CicilanController::class, 'detail'])->name('pembayaran.kavling.detail');
     Route::get('/pembayaran-kavling/bayar-cicilan/{id}', [CicilanController::class, 'bayarCicilan'])->name('bayar.cicilan')->middleware(['auth', 'check.payment']);;
-
 });
 
 require __DIR__ . '/auth.php';

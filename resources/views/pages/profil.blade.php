@@ -67,7 +67,7 @@ Profil
                         </div>
 
                     </div>
-                    <div class="mb-2 text-center">
+                    <div class="mb-3 text-center">
                         <x-primary-button class="w-full flex justify-center items-center" style="width: 200px;" data-bs-toggle="modal"
                             data-bs-target="#editprofil"
                             data-id="{{ Auth::user()->id }}"
@@ -154,7 +154,7 @@ Profil
                                 <div class="row mb-3">
                                     <label for="old_password" class="col-md-4 col-lg-3 col-form-label">Password Lama</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
+                                        <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" required/>
                                         <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
                                     </div>
 
@@ -162,14 +162,14 @@ Profil
                                 <div class="row mb-3">
                                     <label for="newPassword" class="col-md-4 col-lg-3 col-form- label">Password Baru</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+                                        <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" required />
                                         <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Konfirmasi Password Baru</label>
                                     <div class="col-md-8 col-lg-9">
-                                        <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+                                        <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" required/>
                                         <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
                                     </div>
                                 </div>

@@ -39,4 +39,24 @@ class KelolaPembatalanController extends Controller
             return response()->view('errors.404', [], 404);
         }
     }
+
+    public function detail($id)
+    {
+        try {
+            $decrypted_id = Crypt::decrypt($id);
+
+            $pembatalan = Pembatalan::with(['pembelian.user', 'pembelian.boking.blok', 'pembelian.boking.project'])
+                ->whereHas('pembelian', function ($query) {
+                    $query->where('status', 'batal');
+                })
+                ->where('id', $decrypted_id)
+                ->firstOrFail();
+
+            return view('pages.admin.detailPembelian', [
+                'pembelian' => $pembatalan->pembelian
+            ]);
+        } catch (DecryptException $e) {
+            return response()->view('errors.404', [], 404);
+        }
+    }
 }

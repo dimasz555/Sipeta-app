@@ -12,7 +12,10 @@ class LaporanController extends Controller
 {
     public function index()
     {
-        $projects = Project::all();
+        $projects = Project::withCount(['bokings as jumlah_konsumen' => function ($query) {
+            $query->whereHas('pembelian');
+        }])->get();
+
 
         return view('pages.admin.laporan', [
             'projects' => $projects,
@@ -23,15 +26,12 @@ class LaporanController extends Controller
     {
         // Menyaring data berdasarkan project ID
         $project = Project::findOrFail($projectId);
-        
-        // Debug untuk melihat nilai projectId
-        // dd($projectId);
 
         // Pastikan projectId adalah integer
         $projectId = (int) $projectId;
 
         return Excel::download(
-            new ProjectLaporanMultipleSheetsExport($projectId), 
+            new ProjectLaporanMultipleSheetsExport($projectId),
             "laporan_{$project->name}.xlsx"
         );
     }

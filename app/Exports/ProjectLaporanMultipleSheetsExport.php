@@ -29,7 +29,9 @@ class ProjectLaporanMultipleSheetsExport implements WithMultipleSheets
 
     public function sheets(): array
     {
-        $bloks = Blok::whereHas('bokings', function ($query) {
+        $bloks = Blok::whereHas('bokings.pembelian', function ($query) {
+            $query->where('status', '!=', 'batal'); // Ambil pembelian yang tidak dibatalkan
+        })->whereHas('bokings', function ($query) {
             $query->where('project_id', $this->projectId);
         })->get();
 
