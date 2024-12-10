@@ -138,7 +138,7 @@ Kelola Konsumen
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary me-1 mt-1">Tambah</button>
                             <button type="reset" class="btn btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">
-                                Cancel
+                                Batal
                             </button>
                         </div>
                     </form>
@@ -196,7 +196,7 @@ Kelola Konsumen
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary me-1 mt-1">Edit</button>
                             <button type="reset" class="btn btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">
-                                Cancel
+                                Batal
                             </button>
                         </div>
                     </form>
@@ -237,7 +237,7 @@ Kelola Konsumen
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-danger me-1 mt-1">Hapus</button>
                             <button type="reset" class="btn btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">
-                                Cancel
+                                Batal
                             </button>
                         </div>
                     </form>
@@ -278,7 +278,7 @@ Kelola Konsumen
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-danger me-1 mt-1">Reset</button>
                             <button type="reset" class="btn btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">
-                                Cancel
+                                Batal
                             </button>
                         </div>
                     </form>
