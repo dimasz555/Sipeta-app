@@ -56,9 +56,13 @@ class BokingSheet implements FromCollection, WithHeadings, WithTitle, ShouldAuto
                 ->where('status', 'lunas')
                 ->count() : 0;
 
+            $harga_beli = $pembelian->harga;
+
             $dp = $boking->harga_boking + ($pembelian ? $pembelian->dp : 0);
-            $cicilans = $pembelian ? $pembelian->cicilans()->sum('harga_cicilan') : 0;
-            $sisa = $cicilans - $dp;
+            $cicilans = $pembelian ? $pembelian->cicilans()
+                ->where('status', 'lunas')
+                ->sum('harga_cicilan') : 0;
+            $sisa = $harga_beli - $cicilans - $dp;
 
             $row = [
                 'No' => $no++,
@@ -68,6 +72,7 @@ class BokingSheet implements FromCollection, WithHeadings, WithTitle, ShouldAuto
                 'Tanggal Pembelian' => $pembelian
                     ? Carbon::parse($pembelian->tgl_pembelian)->translatedFormat('j F Y')
                     : '-',
+                'DP/CASH' => $dp ? 'Rp ' . number_format($dp, 0, ',', '.') : 'Rp 0',
                 'Jumlah Total Bulan Pembayaran' => $pembelian ? $pembelian->jumlah_bulan_cicilan : '0',
                 'Total Perbulan yang Sudah Dibayar' => $totalBulanDibayar > 0 ? $totalBulanDibayar : 0,
                 'Jumlah Cicilan Perbulan' => $pembelian ? 'Rp ' . number_format($pembelian->harga_cicilan_perbulan, 0, ',', '.') : 'Rp 0',
@@ -127,6 +132,7 @@ class BokingSheet implements FromCollection, WithHeadings, WithTitle, ShouldAuto
             'Nomor Blok',
             'Harga Beli',
             'Tanggal Pembelian',
+            'DP',
             'Jumlah Total Bulan Pembayaran',
             'Total Perbulan yang Sudah Dibayar',
             'Jumlah Cicilan Perbulan',
@@ -185,13 +191,13 @@ class BokingSheet implements FromCollection, WithHeadings, WithTitle, ShouldAuto
                 $sheet = $event->sheet;
 
                 // Merge header utama (A1: A2, B1: B2, ... )
-                $mergeColumns = range('A', 'J'); // Sesuaikan kolom awal
+                $mergeColumns = range('A', 'K'); // Sesuaikan kolom awal
                 foreach ($mergeColumns as $column) {
                     $sheet->mergeCells("{$column}1:{$column}2");
                 }
 
                 // Merge tahun (misalnya, K1:V1 untuk 12 bulan)
-                $startIndex = 11; // Indeks untuk kolom K
+                $startIndex = 12; // Indeks untuk kolom L
                 $tahunMin = \App\Models\Cicilan::min('tahun');
                 $tahunMax = \App\Models\Cicilan::max('tahun');
 
@@ -252,35 +258,43 @@ class BokingSheet implements FromCollection, WithHeadings, WithTitle, ShouldAuto
 
 
                 // Loop melalui data original
-                $no = 1;
+                $no = 1; // Baris data dimulai dari baris ketiga (setelah header)
                 foreach ($bokings as $boking) {
-                    if ($boking->pembelian && $boking->pembelian->status === 'batal') {
-                        $rowIndex = $no + 2;
+                    if ($boking->pembelian) {
+                        $status = $boking->pembelian->status;
+                        $rowIndex = $no + 2; // Baris data di Excel (dimulai dari baris ke-3)
                         $rowRange = "A{$rowIndex}:{$highestColumn}{$rowIndex}";
 
-                        $sheet->getStyle($rowRange)->applyFromArray([
-                            'fill' => [
-                                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                                'startColor' => [
-                                    'argb' => 'FFFF0000',
-                                ],
-                            ],
-                        ]);
+                        // Tentukan warna berdasarkan status
+                        $fillColor = '';
+                        if ($status === 'batal') {
+                            $fillColor = 'FFFFA500'; // Orange
+                        } elseif ($status === 'selesai') {
+                            $fillColor = 'FFFF0000'; // Merah
+                        }
 
-                        // teks putih agar terlihat
-                        $sheet->getStyle($rowRange)->applyFromArray([
-                            'font' => [
-                                'color' => [
-                                    'argb' => 'FFFFFFFF',
+                        // Terapkan styling hanya jika ada warna yang ditentukan
+                        if ($fillColor) {
+                            $sheet->getStyle($rowRange)->applyFromArray([
+                                'fill' => [
+                                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                    'startColor' => [
+                                        'argb' => $fillColor,
+                                    ],
                                 ],
-                            ],
-                        ]);
+                                'font' => [
+                                    'color' => [
+                                        'argb' => 'FFFFFFFF', // Warna teks putih agar kontras
+                                    ],
+                                ],
+                            ]);
+                        }
                     }
                     $no++;
                 }
 
                 // Hitung posisi kolom untuk DP, CICILAN, SISA
-                $startIndex = 11; // Kolom K
+                $startIndex = 12; // Kolom L
                 $tahunCount = $tahunMax - $tahunMin + 1;
                 $totalMonthColumns = $tahunCount * 12;
 
