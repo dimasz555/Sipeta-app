@@ -296,7 +296,7 @@ Kelola Boking
                         @csrf
                         <input type="hidden" name="id" id="confirm_boking_id">
                         <button type="submit" class="btn btn-primary">Konfirmasi</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
                     </form>
                 </div>
             </div>
