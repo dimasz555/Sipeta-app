@@ -39,7 +39,7 @@ class DashboardController extends Controller
             // Mengambil aktivitas terbaru konsumen dalam membayar cicilan
             $recentActivities = Cicilan::whereHas('pembelian', function ($query) {
                 $query->whereNotNull('user_id');
-            })->where('status', 'lunas')->latest('tgl_bayar')->take(5)->get();
+            })->where('status', 'lunas')->latest('tgl_bayar')->take(10)->get();
 
             // Ambil semua proyek dan hitung jumlah boking serta pembelian terkait
             $projects = Project::withCount(['bokings', 'bokings as pembelian_count' => function ($query) {
