@@ -26,7 +26,7 @@ Dashboard
             <div class="col-lg-8">
                 <div class="row">
                     <!-- Users Card -->
-                    <div class="col-xxl-4 col-md-6">
+                    <div class="col-xxl-4 col-md-4">
                         <div class="card info-card sales-card">
                             <div class="card-body">
                                 <h5 class="card-title">Users</h5>
@@ -39,12 +39,11 @@ Dashboard
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div><!-- End Sales Card -->
 
                     <!-- Admin Card -->
-                    <div class="col-xxl-4 col-md-6">
+                    <div class="col-xxl-4 col-md-4">
                         <div class="card info-card sales-card">
                             <div class="card-body">
                                 <h5 class="card-title">Admin</h5>
@@ -57,18 +56,14 @@ Dashboard
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div><!-- End Sales Card -->
 
-                    <!-- Guru Card -->
-                    <div class="col-xxl-4 col-xl-12">
-
+                    <!-- Konsumen Card -->
+                    <div class="col-xxl-4 col-md-4">
                         <div class="card info-card sales-card">
-
                             <div class="card-body">
                                 <h5 class="card-title">Konsumen</h5>
-
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bi bi-people"></i>
@@ -77,10 +72,8 @@ Dashboard
                                         <h6 class="fs-4">{{$totalKonsumen}} Konsumen</h6>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
                     </div><!-- End Customers Card -->
 
                     <!-- Reports -->
