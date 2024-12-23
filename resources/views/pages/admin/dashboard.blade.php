@@ -86,14 +86,13 @@ Dashboard
                     <!-- Reports -->
                     <div class="col-12">
                         <div class="card">
-
                             <div class="card-body">
                                 <h5 class="card-title">Laporan Keuangan</h5>
 
                                 <!-- Laporan Cards -->
                                 <div class="row mb-4">
                                     <!-- Total Penjualan Card -->
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 mb-3 mb-md-0">
                                         <div class="card border-primary h-100">
                                             <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
                                                 <div class="d-flex align-items-center mb-3">
@@ -108,7 +107,7 @@ Dashboard
                                     </div>
 
                                     <!-- Total Pemasukan Card -->
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 mb-3 mb-md-0">
                                         <div class="card border-success h-100">
                                             <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
                                                 <div class="d-flex align-items-center mb-3">
@@ -144,7 +143,7 @@ Dashboard
 
                             </div>
                         </div>
-                    </div><!-- End Reports -->
+                    </div>
 
                 </div>
             </div><!-- End Left side columns -->
