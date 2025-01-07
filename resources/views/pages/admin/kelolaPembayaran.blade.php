@@ -160,7 +160,7 @@ Kelola Pembelian
                         </div>
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary">Tambah</button>
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Kembali</button>
                         </div>
                     </div>
                 </form>
