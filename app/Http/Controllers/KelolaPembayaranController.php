@@ -30,7 +30,9 @@ class KelolaPembayaranController extends Controller
                 ->get();
 
             // Ambil data pembelian dengan status 'lunas' dan 'proses'
-            $pembelian = Pembelian::whereIn('status', ['selesai', 'proses'])->get();
+            $pembelian = Pembelian::whereIn('status', ['selesai', 'proses'])
+                ->orderBy('tgl_pembelian', 'desc')
+                ->get();
 
             // Enkripsi ID 
             foreach ($pembelian as $pb) {
