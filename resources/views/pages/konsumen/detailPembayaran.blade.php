@@ -58,20 +58,7 @@ Detail Cicilan
                         <td><strong>Jumlah Bulan Cicilan </strong></td>
                         <td>: {{ $pembayaran->jumlah_bulan_cicilan }} Bulan</td>
                     </tr>
-                    <tr>
-                        <td><strong>Status</strong></td>
-                        <td>:
-                            @if ($pembayaran->status === 'proses')
-                            <span class="badge bg-warning">PROSES</span>
-                            @elseif ($pembayaran->status === 'selesai')
-                            <span class="badge bg-success">SELESAI</span>
-                            @elseif ($pembayaran->status === 'batal')
-                            <span class="badge bg-danger">BATAL</span>
-                            @else
-                            <span class="badge bg-secondary">Tidak Diketahui</span>
-                            @endif
-                        </td>
-                    </tr>
+
                     @if ($pembayaran->status === 'batal')
                     <tr>
                         <td><strong>Alasan Pembatalan</strong></td>
