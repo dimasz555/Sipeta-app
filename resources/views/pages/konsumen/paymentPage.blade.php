@@ -53,7 +53,22 @@ Pembayaran Cicilan
                 </div>
                 <div class="col-6">{{ \Carbon\Carbon::create()->month($cicilan->bulan)->translatedFormat('F') }} {{ $cicilan->tahun }}</div>
             </div>
-            
+            <div class="row mb-4">
+                <div class="col-6 d-flex justify-content-between">
+                    <strong>Status Cicilan</strong>
+                    <span>:</span>
+                </div>
+                <div class="col-6">
+                    @if ($cicilan->status === 'belum dibayar')
+                    <span class="badge bg-warning">BELUM DIBAYAR</span>
+                    @elseif ($cicilan->status === 'lunas')
+                    <span class="badge bg-success">LUNAS</span>
+                    @elseif ($cicilan->status === 'pending')
+                    <span class="badge bg-secondary">PENDING</span>
+                    @else
+                    <span class="badge bg-danger">BATAL</span>
+                    @endif
+                </div>
             </div>
             <!-- Pesan Peringatan Batas Waktu Pembayaran -->
             <div class="alert alert-warning mb-4">
