@@ -76,6 +76,12 @@ class KelolaPembayaranController extends Controller
     public function store(Request $request)
     {
         try {
+            $request->merge([
+                'harga' => str_replace('.', '', $request->harga),
+                'dp' => str_replace('.', '', $request->dp),
+                'harga_cicilan_perbulan' => str_replace('.', '', $request->harga_cicilan_perbulan),
+            ]);
+
             $request->validate([
                 'user_id' => 'required|exists:users,id',
                 'boking_id' => 'required|exists:bokings,id',
