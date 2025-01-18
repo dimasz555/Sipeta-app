@@ -140,11 +140,11 @@ Kelola Pembelian
                         </div>
                         <div class="col-12 mb-3">
                             <label for="harga" class="form-label">Harga Tanah</label>
-                            <input type="number" class="form-control" id="harga" name="harga" required>
+                            <input type="text" class="form-control" id="harga" name="harga" required oninput="formatRupiah(this)">
                         </div>
                         <div class="col-12 mb-3">
                             <label for="dp" class="form-label">DP</label>
-                            <input type="number" class="form-control" id="dp" name="dp" required>
+                            <input type="text" class="form-control" id="dp" name="dp" required oninput="formatRupiah(this)">
                         </div>
                         <div class="col-12 mb-3">
                             <label for="jumlah_bulan_cicilan" class="form-label">Jumlah Bulan Cicilan</label>
@@ -152,7 +152,7 @@ Kelola Pembelian
                         </div>
                         <div class="col-12 mb-3">
                             <label for="harga_cicilan_perbulan" class="form-label">Harga Cicilan per Bulan</label>
-                            <input type="number" class="form-control" id="harga_cicilan_perbulan" name="harga_cicilan_perbulan" required>
+                            <input type="text" class="form-control" id="harga_cicilan_perbulan" name="harga_cicilan_perbulan" required oninput="formatRupiah(this)">
                         </div>
                         <div class="col-12 mb-3">
                             <label for="pjb_file" class="form-label">PJB</label>
@@ -450,6 +450,14 @@ Kelola Pembelian
         });
 
     });
+
+    function formatRupiah(input) {
+        // Menghapus karakter selain angka
+        let value = input.value.replace(/[^\d]/g, '');
+        // Menambahkan titik setiap 3 digit
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = value;
+    }
 </script>
 
 @endsection

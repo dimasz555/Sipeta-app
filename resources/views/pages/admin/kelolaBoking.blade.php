@@ -173,8 +173,9 @@ Kelola Boking
 
                             <div class="col-12 mb-2">
                                 <label class="form-label" for="harga_boking">Harga Boking</label>
-                                <input id="harga_boking" name="harga_boking" class="form-control" type="number" required />
+                                <input id="harga_boking" name="harga_boking" class="form-control" type="text" required />
                             </div>
+
                         </div>
 
                         <div class="col-12 text-center">
@@ -598,6 +599,23 @@ Kelola Boking
         });
 
 
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const hargaBokingInput = document.getElementById('harga_boking');
+
+        hargaBokingInput.addEventListener('input', function(e) {
+            let value = e.target.value;
+
+            // Hapus semua karakter non-digit
+            value = value.replace(/[^0-9]/g, '');
+
+            // Format angka dengan titik
+            const formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+            // Tampilkan nilai yang sudah diformat
+            e.target.value = formattedValue;
+        });
     });
 </script>
 
