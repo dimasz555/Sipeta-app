@@ -53,7 +53,7 @@ class KelolaBokingController extends Controller
             $request->merge([
                 'harga_boking' => str_replace('.', '', $request->harga_boking),
             ]);
-            
+
             // Validasi data input
             $request->validate([
                 'user_id' => 'required|exists:users,id',
@@ -93,6 +93,10 @@ class KelolaBokingController extends Controller
     public function updateBoking(Request $request)
     {
         try {
+            $request->merge([
+                'harga_boking' => str_replace('.', '', $request->harga_boking),
+            ]);
+
             // Validasi data input
             $request->validate([
                 'user_id' => 'required|exists:users,id',

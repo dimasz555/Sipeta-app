@@ -173,15 +173,15 @@ Kelola Boking
 
                             <div class="col-12 mb-2">
                                 <label class="form-label" for="harga_boking">Harga Boking</label>
-                                <input id="harga_boking" name="harga_boking" class="form-control" type="text" required />
+                                <input id="harga_boking" name="harga_boking" class="form-control" type="text" required oninput="formatRupiah(this)" />
                             </div>
 
                         </div>
 
-                        <div class="col-12 text-center">
-                            <button type="submit" class="btn btn-primary">Tambah</button>
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                        </div>
+                        <div class=" col-12 text-center">
+                                <button type="submit" class="btn btn-primary">Tambah</button>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                            </div>
                     </form>
                 </div>
             </div>
@@ -243,8 +243,10 @@ Kelola Boking
 
                             <div class="col-12 mb-2">
                                 <label class="form-label" for="edit_harga_boking">Harga Boking</label>
-                                <input id="edit_harga_boking" name="harga_boking" class="form-control" type="number" required />
+                                <input id="edit_harga_boking" name="harga_boking" class="form-control" type="text" required
+                                    oninput="formatRupiah(this)" />
                             </div>
+
                         </div>
 
                         <div class="col-12 text-center">
@@ -537,9 +539,15 @@ Kelola Boking
             modal.find('#edit_boking_id').val(button.data('id'));
             modal.find('#edit_no_blok').val(button.data('no_blok'));
             modal.find('#edit_tgl_boking').val(button.data('tgl_boking'));
-            modal.find('#edit_harga_boking').val(button.data('harga_boking'));
+            modal.find('#edit_harga_boking').val(formatRupiahOnLoad(harga_boking));
             modal.find('#edit_project_id').val(button.data('project-id')).trigger('change');
             modal.find('#edit_blok_id').val(button.data('blok-id')).trigger('change');
+
+            // Format harga saat modal terbuka
+            function formatRupiahOnLoad(value) {
+                if (!value) return '';
+                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            }
         });
 
         $('#confirmLunasModal').on('show.bs.modal', function(event) {
@@ -601,22 +609,13 @@ Kelola Boking
 
     });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const hargaBokingInput = document.getElementById('harga_boking');
-
-        hargaBokingInput.addEventListener('input', function(e) {
-            let value = e.target.value;
-
-            // Hapus semua karakter non-digit
-            value = value.replace(/[^0-9]/g, '');
-
-            // Format angka dengan titik
-            const formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-            // Tampilkan nilai yang sudah diformat
-            e.target.value = formattedValue;
-        });
-    });
+    function formatRupiah(input) {
+        // Menghapus karakter selain angka
+        let value = input.value.replace(/[^\d]/g, '');
+        // Menambahkan titik setiap 3 digit
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = value;
+    }
 </script>
 
 @endsection
