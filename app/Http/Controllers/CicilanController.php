@@ -192,6 +192,7 @@ class CicilanController extends Controller
                     $cicilan->update([
                         'tgl_bayar' => now(),
                         'status' => 'lunas',
+                        'payment_by' => 'midtrans'
                     ]);
 
                     $pembelian = $cicilan->pembelian;

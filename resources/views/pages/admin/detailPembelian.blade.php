@@ -159,6 +159,33 @@ Detail Pembelian
                                     @endif
                                 </div>
                             </div>
+                            <div class="row mb-1 align-items-center">
+                                <div class="col-6 d-flex justify-content-between">
+                                    <strong>Metode Pembayaran</strong>
+                                    <span>:</span>
+                                </div>
+                                @if ($cicilan->payment_by === 'bca')
+                                <div class="col-6">
+                                    BCA
+                                </div>
+                                @elseif ($cicilan->payment_by === 'bsi')
+                                <div class="col-6">
+                                    BSI
+                                </div>
+                                @elseif ($cicilan->payment_by === 'cash')
+                                <div class="col-6">
+                                    Cash
+                                </div>
+                                @elseif ($cicilan->payment_by === 'midtrans')
+                                <div class="col-6">
+                                    Midtrans
+                                </div>
+                                @else
+                                <div class="col-6">
+                                    -
+                                </div>
+                                @endif
+                            </div>
                             <div class="row mb-4 align-items-center">
                                 <div class="col-6 d-flex justify-content-between">
                                     <strong>Kwitansi</strong>
@@ -174,21 +201,35 @@ Detail Pembelian
                                     @endif
                                 </div>
                             </div>
-                            @if ($cicilan->status !== 'belum dibayar')
-                            <x-primary-button
-                                class="w-full flex justify-center items-center position-absolute bottom-0 end-0 mb-2 mx-3"
-                                style="width: 100px;"
-                                data-bs-toggle="modal"
-                                data-bs-target="#uploadKwitansiModal"
-                                title="Upload Kwitansi"
-                                data-id="{{ $cicilan->id }}"
-                                data-no-transaksi="{{ $cicilan->no_transaksi }}"
-                                data-no-cicilan="{{ $cicilan->no_cicilan }}"
-                                data-harga-cicilan="{{ $cicilan->harga_cicilan }}">
-                                <i class="bi bi-upload me-2"></i> Kwitansi
-                            </x-primary-button>
-                            @else
-                            @endif
+                            <div class="w-auto flex justify-center items-center gap-2 position-absolute bottom-0 end-0 mb-2 mx-3"> <!-- Posisi di kanan bawah -->
+                                <x-primary-button
+                                    class="flex items-center justify-center w-30"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#inputPembayaranModal"
+                                    data-id="{{ $cicilan->id }}"
+                                    data-no-cicilan="{{ $cicilan->no_cicilan }}"
+                                    data-no-transaksi="{{ $cicilan->no_transaksi }}"
+                                    data-harga-cicilan="{{ $cicilan->harga_cicilan }}"
+                                    data-payment-by="{{ $cicilan->payment_by }}"
+                                    data-tgl-bayar="{{ $cicilan->tgl_bayar }}"
+                                    data-status="{{ $cicilan->status }}">
+                                    <i class="bi bi-pencil me-2"></i> Pembayaran
+                                </x-primary-button>
+
+                                @if ($cicilan->status !== 'belum dibayar')
+                                <x-primary-button
+                                    class="flex items-center justify-center w-30"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#uploadKwitansiModal"
+                                    title="Upload Kwitansi"
+                                    data-id="{{ $cicilan->id }}"
+                                    data-no-transaksi="{{ $cicilan->no_transaksi }}"
+                                    data-no-cicilan="{{ $cicilan->no_cicilan }}"
+                                    data-harga-cicilan="{{ $cicilan->harga_cicilan }}">
+                                    <i class="bi bi-upload me-2"></i> Kwitansi
+                                </x-primary-button>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -265,6 +306,98 @@ Detail Pembelian
         </div>
     </div>
 
+    <!-- Modal Pembayaran Manual -->
+    <div class="modal fade" id="inputPembayaranModal" tabindex="-1" aria-labelledby="inputPembayaranModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ route('update.cicilan') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="id" id="id_update">
+
+                    <div class="modal-body px-sm-5 mx-50 pb-5">
+                        <h3 class="text-center mb-1">Edit Pembayaran</h3>
+                        <div class="mb-4">
+                            <div class="row">
+                                <!-- Cicilan ke -->
+                                <div class="col-5">
+                                    <strong>Cicilan ke</strong>
+                                </div>
+                                <div class="col-1 text-center">
+                                    <strong>:</strong>
+                                </div>
+                                <div class="col-6">
+                                    <span id="no_cicilan_update"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- No Transaksi -->
+                                <div class="col-5">
+                                    <strong>No Transaksi</strong>
+                                </div>
+                                <div class="col-1 text-center">
+                                    <strong>:</strong>
+                                </div>
+                                <div class="col-6">
+                                    <span id="no_transaksi_update"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Harga Cicilan -->
+                                <div class="col-5">
+                                    <strong>Harga Cicilan</strong>
+                                </div>
+                                <div class="col-1 text-center">
+                                    <strong>:</strong>
+                                </div>
+                                <div class="col-6">
+                                    <span id="harga_cicilan_update"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label>Metode Pembayaran</label>
+                            <select name="payment_by" class="form-select" required>
+                                <option value="" disabled selected>Pilih</option>
+                                <option value="bca">BCA</option>
+                                <option value="bsi">BSI</option>
+                                <option value="cash">Cash</option>
+                                <option value="midtrans">Midtrans</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Tanggal Bayar</label>
+                            <input type="datetime-local" name="tgl_bayar" value="{{ $cicilan->tgl_bayar ? $cicilan->tgl_bayar->format('Y-m-d\TH:i:s') : '' }}"
+                                step="1" class="form-control">
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Status Pembayaran</label>
+                            <select name="status" class="form-select" required>
+                                <option value="" disabled selected>Pilih</option>
+                                <option value="lunas">Lunas</option>
+                                <option value="batal">Batal</option>
+                                <option value="belum dibayar">Belum Dibayar</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 </main>
 
 <script>
@@ -282,6 +415,42 @@ Detail Pembelian
         document.getElementById('no_cicilan_modal').textContent = noCicilan;
         document.getElementById('no_transaksi_modal').textContent = noTransaksi;
         document.getElementById('harga_cicilan_modal').textContent = 'Rp ' + new Intl.NumberFormat().format(hargaCicilan);
+    });
+
+    var modal = document.getElementById('inputPembayaranModal');
+    modal.addEventListener('show.bs.modal', function(event) {
+        var button = event.relatedTarget; // Tombol yang diklik
+        var id = button.getAttribute('data-id');
+        var noCicilan = button.getAttribute('data-no-cicilan');
+        var noTransaksi = button.getAttribute('data-no-transaksi');
+        var hargaCicilan = button.getAttribute('data-harga-cicilan');
+        var paymentBy = button.getAttribute('data-payment-by');
+        var tglBayar = button.getAttribute('data-tgl-bayar');
+        var status = button.getAttribute('data-status');
+
+        // Set nilai input di dalam modal
+        document.getElementById('id_update').value = id;
+        document.getElementById('no_cicilan_update').textContent = noCicilan;
+        document.getElementById('no_transaksi_update').textContent = noTransaksi;
+        document.getElementById('harga_cicilan_update').textContent = 'Rp ' + new Intl.NumberFormat().format(hargaCicilan);
+
+        // Set nilai untuk metode pembayaran
+        var paymentSelect = modal.querySelector('select[name="payment_by"]');
+        if (paymentBy) {
+            paymentSelect.value = paymentBy;
+        }
+
+        // Set nilai untuk tanggal bayar
+        var tglBayarInput = modal.querySelector('input[name="tgl_bayar"]');
+        if (tglBayar) {
+            tglBayarInput.value = tglBayar;
+        }
+
+        // Set nilai untuk status
+        var statusSelect = modal.querySelector('select[name="status"]');
+        if (status) {
+            statusSelect.value = status;
+        }
     });
 </script>
 

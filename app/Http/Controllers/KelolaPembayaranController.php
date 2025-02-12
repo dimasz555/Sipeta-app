@@ -365,4 +365,29 @@ class KelolaPembayaranController extends Controller
             return redirect()->back();
         }
     }
+
+    public function updateCicilan(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required|exists:cicilan,id',
+                'payment_by' => 'required|string',
+                'tgl_bayar' => 'required|date',
+                'status' => 'required|in:lunas,batal',
+            ]);
+
+            $cicilan = Cicilan::findOrFail($request->id);
+            $cicilan->payment_by = $request->payment_by;
+            $cicilan->tgl_bayar = Carbon::parse($request->tgl_bayar);
+            $cicilan->status = $request->status;
+
+            $cicilan->save();
+
+            Alert::toast('Cicilan Berhasil Diupdate', 'success')->autoClose(10000);
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            Alert::toast('Terjadi kesalahan: ' . $e->getMessage(), 'error')->autoClose(10000);
+            return redirect()->back();
+        }
+    }
 }

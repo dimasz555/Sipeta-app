@@ -148,6 +148,33 @@ Detail Cicilan
                                     @endif
                                 </div>
                             </div>
+                            <div class="row mb-1 align-items-center">
+                                <div class="col-6 d-flex justify-content-between">
+                                    <strong>Metode Pembayaran</strong>
+                                    <span>:</span>
+                                </div>
+                                @if ($cicilan->payment_by === 'bca')
+                                <div class="col-6">
+                                    BCA
+                                </div>
+                                @elseif ($cicilan->payment_by === 'bsi')
+                                <div class="col-6">
+                                    BSI
+                                </div>
+                                @elseif ($cicilan->payment_by === 'cash')
+                                <div class="col-6">
+                                    Cash
+                                </div>
+                                @elseif ($cicilan->payment_by === 'midtrans')
+                                <div class="col-6">
+                                    Midtrans
+                                </div>
+                                @else
+                                <div class="col-6">
+                                    -
+                                </div>
+                                @endif
+                            </div>
                             <div class="row mb-4 align-items-center">
                                 <div class="col-6 d-flex justify-content-between">
                                     <strong>Kwitansi</strong>

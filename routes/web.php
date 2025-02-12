@@ -66,6 +66,7 @@ Route::middleware('auth', 'role:admin')->group(function () {
     Route::put('/admin/kelola-pembelian/edit', [KelolaPembayaranController::class, 'update'])->name('edit.pembelian');
     Route::put('/admin/kelola-pembelian/batalkan', [KelolaPembayaranController::class, 'batalPembelian'])->name('batal.pembelian');
     Route::post('/admin/kelola-pembelian/upload-kwitansi', [KelolaPembayaranController::class, 'uploadKwitansi'])->name('upload.kwitansi');
+    Route::put('/admin/kelola-pembelian/update-cicilan', [KelolaPembayaranController::class, 'updateCicilan'])->name('update.cicilan');
 
 
     Route::get('/admin/kelola-pembatalan', [KelolaPembatalanController::class, 'index'])->name('index.pembatalan');

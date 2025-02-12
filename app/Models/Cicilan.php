@@ -20,6 +20,7 @@ class Cicilan extends Model
         'tahun',
         'kwitansi',
         'status',
+        'payment_by'
     ];
 
     protected $casts = [
