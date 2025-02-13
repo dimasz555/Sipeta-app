@@ -64,6 +64,16 @@ class KelolaBokingController extends Controller
                 'harga_boking' => 'required|integer',
             ]);
 
+            // validasi nomor blok
+            $cekBoking = Boking::where('project_id', $request->project_id)
+                ->whereRaw('LOWER(no_blok) = ?', [strtolower($request->no_blok)])
+                ->whereIn('status', ['proses', 'lunas'])
+                ->exists();
+
+            if ($cekBoking) {
+                Alert::toast('Nomor Blok Ini Sudah Diboking Oleh Konsumen Lain', 'error')->autoClose(10000);
+                return redirect()->back();
+            }
             DB::beginTransaction();
 
             $boking = Boking::create([
