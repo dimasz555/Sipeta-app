@@ -9,6 +9,7 @@ use App\Http\Controllers\KelolaPembatalanController;
 use App\Http\Controllers\KelolaPembayaranController;
 use App\Http\Controllers\KelolaProjectController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\LihatCicilanController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Cicilan;
 use Illuminate\Support\Facades\Route;
@@ -67,6 +68,8 @@ Route::middleware('auth', 'role:admin')->group(function () {
     Route::put('/admin/kelola-pembelian/batalkan', [KelolaPembayaranController::class, 'batalPembelian'])->name('batal.pembelian');
     Route::post('/admin/kelola-pembelian/upload-kwitansi', [KelolaPembayaranController::class, 'uploadKwitansi'])->name('upload.kwitansi');
     Route::put('/admin/kelola-pembelian/update-cicilan', [KelolaPembayaranController::class, 'updateCicilan'])->name('update.cicilan');
+
+    Route::get('/admin/daftar-cicilan-lunas', [LihatCicilanController::class, 'index'])->name('index.cicilan.lunas');
 
 
     Route::get('/admin/kelola-pembatalan', [KelolaPembatalanController::class, 'index'])->name('index.pembatalan');
