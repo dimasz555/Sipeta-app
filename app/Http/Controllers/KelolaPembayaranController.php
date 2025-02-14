@@ -37,6 +37,13 @@ class KelolaPembayaranController extends Controller
             // Enkripsi ID 
             foreach ($pembelian as $pb) {
                 $pb->encrypted_id = Crypt::encrypt($pb->id);
+                // Ambil tanggal bayar terakhir
+                $lastPayment = Cicilan::where('pembelian_id', $pb->id)
+                    ->where('status', 'lunas') // Hanya yang sudah dibayar
+                    ->orderBy('tgl_bayar', 'desc')
+                    ->first();
+
+                $pb->last_payment_date = $lastPayment ? Carbon::parse($lastPayment->tgl_bayar) : null;
             }
             return view('pages.admin.kelolaPembayaran', [
                 'boking' => $boking,
