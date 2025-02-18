@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Blok;
 use App\Models\Cicilan;
 use App\Models\Pembelian;
+use App\Models\Boking;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
@@ -88,8 +89,17 @@ class CicilanController extends Controller
                 ->where('user_id', $user->id)
                 ->firstOrFail();
 
+            // Hitung total pembayaran yang sudah dilakukan
+            $totalCicilanLunas = $pembayaran->cicilans->where('status', 'lunas')->sum('harga_cicilan');
+            $totalPembayaran = $pembayaran->boking->harga_boking + $pembayaran->dp + $totalCicilanLunas;
+
+            // Hitung Sisa Pembayaran
+            $sisaPembayaran = $pembayaran->harga - $totalPembayaran;
+
             return view('pages.konsumen.detailPembayaran', [
                 'pembayaran' => $pembayaran,
+                'totalPembayaran' => $totalPembayaran,
+                'sisaPembayaran' => $sisaPembayaran,
             ]);
         } catch (DecryptException $e) {
             return response()->view('errors.404', [], 404);
