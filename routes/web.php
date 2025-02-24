@@ -7,6 +7,7 @@ use App\Http\Controllers\KelolaBokingController;
 use App\Http\Controllers\KelolaKonsumenController;
 use App\Http\Controllers\KelolaPembatalanController;
 use App\Http\Controllers\KelolaPembayaranController;
+use App\Http\Controllers\KelolaPengeluaranController;
 use App\Http\Controllers\KelolaProjectController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LihatCicilanController;
@@ -74,6 +75,15 @@ Route::middleware('auth', 'role:admin')->group(function () {
 
     Route::get('/admin/kelola-pembatalan', [KelolaPembatalanController::class, 'index'])->name('index.pembatalan');
     Route::get('/pembatalan/detail/{id}', [KelolaPembatalanController::class, 'detail'])->name('pembatalan.detail');
+
+    Route::get('/admin/kelola-pengeluaran', [KelolaPengeluaranController::class, 'index'])->name('index.pengeluaran');
+    Route::post('/admin/kelola-pengeluaran/tambah-jenis', [KelolaPengeluaranController::class, 'storeJenis'])->name('tambah.jenis');
+    Route::put('/admin/kelola-pengeluaran/edit-jenis', [KelolaPengeluaranController::class, 'updateJenis'])->name('update.jenis');
+    Route::delete('/admin/kelola-pengeluaran/hapus-jenis', [KelolaPengeluaranController::class, 'destroyJenis'])->name('hapus.jenis');
+    Route::post('/admin/kelola-pengeluaran/tambah-pengeluaran', [KelolaPengeluaranController::class, 'storePengeluaran'])->name('tambah.pengeluaran');
+    Route::put('/admin/kelola-pengeluaran/edit-pengeluaran', [KelolaPengeluaranController::class, 'updatePengeluaran'])->name('update.pengeluaran');
+    Route::delete('/admin/kelola-pengeluaran/hapus-pengeluaran', [KelolaPengeluaranController::class, 'destroyPengeluaran'])->name('hapus.pengeluaran');
+
 
     Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('index.laporan');
     Route::get('/laporan/export/{projectId}', [LaporanController::class, 'exportToExcel'])->name('laporan.export');

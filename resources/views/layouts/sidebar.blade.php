@@ -76,6 +76,14 @@
              </li>
 
              <li class="nav-item">
+                 <a class="nav-link {{ request()->routeIs('index.pengeluaran') ? 'active' : '' }}"
+                     href="{{ route('index.pengeluaran') }}">
+                     <i class="bi bi-file-earmark-text"></i>
+                     <span>Kelola Pengeluaran</span>
+                 </a>
+             </li>
+
+             <li class="nav-item">
                  <a class="nav-link {{ request()->routeIs('index.laporan') ? 'active' : '' }}"
                      href="{{ route('index.laporan') }}">
                      <i class="bi bi-clipboard-data"></i>
